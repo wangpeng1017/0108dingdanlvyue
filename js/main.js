@@ -1,3 +1,6 @@
+// 页面模块容器 - 必须在页面脚本加载前定义
+window.Pages = window.Pages || {};
+
 // 主应用逻辑
 const App = {
     currentPage: 'dashboard',
@@ -92,16 +95,34 @@ const App = {
 
         const pageNames = {
             'dashboard': '首页',
-            'order-list': '订单管理 / 订单列表',
-            'order-tracking': '订单管理 / 交付跟踪',
-            'production-plan': 'PMC管理 / 生产计划',
-            'work-order': 'PMC管理 / 生产工单',
-            'inspection': '仓库管理 / 送检单',
-            'material-request': '仓库管理 / 领料单',
-            'inventory': '仓库管理 / 库存查询',
-            'purchase-order': '采购管理 / 采购订单',
-            'supplier': '采购管理 / 供应商',
-            'iqc': '质量管理 / 来料检验'
+            // 主数据管理
+            'user-management': '主数据管理 / 用户管理',
+            'role-management': '主数据管理 / 角色管理',
+            'rule-management': '主数据管理 / 规则管理',
+            'warehouse-master': '主数据管理 / 仓库管理',
+            'product-master': '主数据管理 / 货品管理',
+            'service-provider': '主数据管理 / 服务商管理',
+            'customer-master': '主数据管理 / 客户管理',
+            'contract-management': '主数据管理 / 合同管理',
+            'order-type': '主数据管理 / 订单类型管理',
+            'consignee': '主数据管理 / 收货人管理',
+            // 销售管理
+            'order-create': '销售管理 / 订单录入',
+            'order-list': '销售管理 / 订单列表',
+            'order-split': '销售管理 / 订单拆分',
+            'order-status': '销售管理 / 订单状态跟踪',
+            // 交货单管理
+            'delivery-create': '交货单管理 / 交货单创建',
+            'delivery-list': '交货单管理 / 交货单列表',
+            'delivery-trace': '交货单管理 / 关联追溯',
+            // S&OP计划
+            'sop-data': 'S&OP计划 / 数据收集',
+            'sop-demand': 'S&OP计划 / 需求计划',
+            'sop-coordinate': 'S&OP计划 / 协调计划',
+            'sop-tracking': 'S&OP计划 / 执行跟踪',
+            // 报表分析
+            'report-template': '报表分析 / 报表模板',
+            'report-query': '报表分析 / 报表查询'
         };
 
         const parts = (pageNames[page] || page).split(' / ');
@@ -114,3 +135,4 @@ const App = {
 // 页面初始化
 document.addEventListener('DOMContentLoaded', () => App.init());
 window.App = App;
+

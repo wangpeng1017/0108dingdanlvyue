@@ -1,599 +1,166 @@
-// 模拟数据 - 基于正泰表单资料
+// 模拟数据 - 按规格书3.2要求
 const MockData = {
-  // 当前登录用户
-  currentUser: {
-    id: 1,
-    username: 'admin',
-    name: '张明',
-    role: '系统管理员',
-    avatar: '张'
-  },
+  currentUser: { id: 1, username: 'admin', name: '张明', role: '系统管理员', avatar: '张' },
 
-  // 订单列表数据
-  orders: [
-    {
-      id: 'SO20250108001',
-      customerId: 'C001',
-      customerName: '泰国分公司',
-      productName: 'PCBA逆变器 Three Phase 50KW/60M',
-      productModel: '5443473',
-      quantity: 100,
-      orderDate: '2025-01-06',
-      deliveryDate: '2025-02-15',
-      status: '生产中',
-      progress: 45,
-      priority: '高'
-    },
-    {
-      id: 'SO20250108002',
-      customerId: 'C002',
-      customerName: '盛能杰ODM',
-      productName: 'PCBA逆变器 5KW',
-      productModel: '5443474',
-      quantity: 200,
-      orderDate: '2025-01-05',
-      deliveryDate: '2025-02-20',
-      status: '待排产',
-      progress: 10,
-      priority: '中'
-    },
-    {
-      id: 'SO20250108003',
-      customerId: 'C003',
-      customerName: '安能物流',
-      productName: '小功率逆变器 3KW',
-      productModel: '5443475',
-      quantity: 500,
-      orderDate: '2025-01-04',
-      deliveryDate: '2025-02-28',
-      status: '待确认',
-      progress: 0,
-      priority: '低'
-    },
-    {
-      id: 'SO20250107001',
-      customerId: 'C004',
-      customerName: '华南区代理',
-      productName: 'PCBA测试板',
-      productModel: '8107020428',
-      quantity: 150,
-      orderDate: '2025-01-03',
-      deliveryDate: '2025-01-25',
-      status: '已发货',
-      progress: 100,
-      priority: '高'
-    },
-    {
-      id: 'SO20250106001',
-      customerId: 'C005',
-      customerName: '西北区客户',
-      productName: '贴片电阻',
-      productModel: '81070300029',
-      quantity: 10000,
-      orderDate: '2025-01-02',
-      deliveryDate: '2025-01-20',
-      status: '已完成',
-      progress: 100,
-      priority: '中'
-    }
+  // 一、主数据管理
+  // 1.1 用户管理
+  users: [
+    { id: 'U001', username: 'zhangming', name: '张明', role: '系统管理员', department: '信息部', phone: '13800138001', email: 'zhang@chint.com', status: '启用', createTime: '2024-01-01' },
+    { id: 'U002', username: 'liwei', name: '李伟', role: '销售主管', department: '销售部', phone: '13800138002', email: 'li@chint.com', status: '启用', createTime: '2024-01-05' },
+    { id: 'U003', username: 'wangfang', name: '王芳', role: '仓库管理员', department: '仓储部', phone: '13800138003', email: 'wang@chint.com', status: '启用', createTime: '2024-02-01' },
+    { id: 'U004', username: 'zhaoqiang', name: '赵强', role: '计划员', department: 'PMC部', phone: '13800138004', email: 'zhao@chint.com', status: '禁用', createTime: '2024-03-01' }
   ],
 
-  // 生产计划数据
-  productionPlans: [
-    {
-      id: 'PP20250401',
-      productName: 'PCBA逆变器 Three Phase 50KW/60M',
-      productModel: '5443473',
-      planQuantity: 100,
-      completedQuantity: 45,
-      startDate: '2025-01-10',
-      endDate: '2025-02-10',
-      responsible: '李工',
-      status: '进行中',
-      line: 'A线'
-    },
-    {
-      id: 'PP20250402',
-      productName: 'PCBA测试板',
-      productModel: '8107020428',
-      planQuantity: 200,
-      completedQuantity: 200,
-      startDate: '2025-01-05',
-      endDate: '2025-01-20',
-      responsible: '王工',
-      status: '已完成',
-      line: 'B线'
-    },
-    {
-      id: 'PP20250403',
-      productName: '小功率逆变器 3KW',
-      productModel: '5443475',
-      planQuantity: 500,
-      completedQuantity: 0,
-      startDate: '2025-01-15',
-      endDate: '2025-02-25',
-      responsible: '张工',
-      status: '未开始',
-      line: 'C线'
-    }
+  // 1.2 角色管理
+  roles: [
+    { id: 'R001', name: '系统管理员', code: 'admin', description: '拥有系统全部权限', permissions: ['用户管理', '角色管理', '规则管理', '全部数据'], userCount: 1, status: '启用' },
+    { id: 'R002', name: '销售主管', code: 'sales_manager', description: '销售订单管理权限', permissions: ['订单录入', '订单审核', '交货单管理', '报表查看'], userCount: 3, status: '启用' },
+    { id: 'R003', name: '仓库管理员', code: 'warehouse', description: '仓库及库存管理权限', permissions: ['仓库管理', '库存查看', '出入库操作'], userCount: 5, status: '启用' },
+    { id: 'R004', name: '计划员', code: 'planner', description: 'S&OP计划管理权限', permissions: ['需求计划', '协调计划', '执行跟踪'], userCount: 2, status: '启用' }
   ],
 
-  // 生产工单数据 - 基于仓库备料交接单
-  workOrders: [
-    {
-      id: 'WO20250108001',
-      orderId: 'SO20250108001',
-      productName: 'PCBA逆变器 Three Phase 50KW/60M',
-      productModel: '5443473',
-      quantity: 100,
-      createDate: '2025-01-08',
-      status: '生产中',
-      materials: [
-        { code: '6.0302.209.00', name: '单相桥接线材MWBC01AMWVC9815', required: 38, issued: 38 },
-        { code: '6.0302.207.80', name: '交流接线材MWAC 10A15mm', required: 31, issued: 31 },
-        { code: '6.0302.201.04D', name: 'DC接线材', required: 47, issued: 45 }
-      ]
-    },
-    {
-      id: 'WO20250107001',
-      orderId: 'SO20250107001',
-      productName: 'PCBA测试板',
-      productModel: '8107020428',
-      quantity: 150,
-      createDate: '2025-01-07',
-      status: '已完工',
-      materials: [
-        { code: '8107030043', name: '贴片电阻', required: 5000, issued: 5000 },
-        { code: '8107030029', name: '贴片电阻', required: 10000, issued: 10000 }
-      ]
-    }
+  // 1.3 规则管理
+  rules: [
+    { id: 'RULE001', name: '订单自动审核规则', type: '业务规则', condition: '订单金额≤10000且客户等级=A', action: '自动审核通过', status: '启用', priority: 1 },
+    { id: 'RULE002', name: '库存预警规则', type: '预警规则', condition: '库存数量<安全库存', action: '触发库存预警', status: '启用', priority: 1 },
+    { id: 'RULE003', name: '交期预警规则', type: '预警规则', condition: '距离交期≤3天且未发货', action: '触发交期预警', status: '启用', priority: 2 },
+    { id: 'RULE004', name: '订单拆分规则', type: '业务规则', condition: '多个收货地址', action: '自动拆分订单', status: '禁用', priority: 3 }
   ],
 
-  // 送检单数据 - 基于仓库送检单
-  inspectionOrders: [
-    {
-      id: 'S001284',
-      productName: '贴片电阻',
-      materialCode: '8107020428',
-      sendQty: 10000,
-      inspectQty: 10015.5,
-      sendDate: '2025-03-20',
-      status: '已合格',
-      inspector: '王为',
-      sender: '姜玉萍',
-      result: '合格'
-    },
-    {
-      id: 'S001285',
-      productName: '贴片电阻',
-      materialCode: '81070300029',
-      sendQty: 5000,
-      inspectQty: 5000,
-      sendDate: '2025-03-19',
-      status: '待检验',
-      inspector: '',
-      sender: '姜玉萍',
-      result: ''
-    },
-    {
-      id: 'S001286',
-      productName: '贴片电容',
-      materialCode: '845100693p2',
-      sendQty: 25000,
-      inspectQty: 25000,
-      sendDate: '2025-03-18',
-      status: '检验中',
-      inspector: '王为',
-      sender: '张三',
-      result: ''
-    },
-    {
-      id: 'S001287',
-      productName: '贴片电阻',
-      materialCode: '45110693',
-      sendQty: 30000,
-      inspectQty: 0,
-      sendDate: '2025-03-15',
-      status: '不合格',
-      inspector: '王为',
-      sender: '李四',
-      result: '不合格'
-    }
+  // 2.1 仓库管理
+  warehouses: [
+    { id: 'WH001', code: 'WH-HZ-01', name: '杭州成品仓', type: '成品仓', address: '杭州市余杭区', manager: '王芳', phone: '0571-88888888', capacity: 10000, used: 6500, status: '正常' },
+    { id: 'WH002', code: 'WH-HZ-02', name: '杭州原材料仓', type: '原材料仓', address: '杭州市余杭区', manager: '李明', phone: '0571-88888889', capacity: 15000, used: 12000, status: '正常' },
+    { id: 'WH003', code: 'WH-SH-01', name: '上海分仓', type: '成品仓', address: '上海市浦东新区', manager: '张华', phone: '021-66666666', capacity: 5000, used: 3200, status: '正常' }
   ],
 
-  // 领料单数据 - 基于领料单
-  materialRequests: [
-    {
-      id: 'T0001802',
-      orderId: 'SO20250108001',
-      productName: 'PCBA 12610N',
-      materialCode: '103310c',
-      spec: 'PCS',
-      requestQty: 1,
-      actualQty: 1,
-      type: '生产耗材',
-      applicant: '姜玉萍',
-      reviewer: '宋刘',
-      warehouse: '龙毅',
-      status: '已领取',
-      createDate: '2025-03-10'
-    },
-    {
-      id: 'T0001803',
-      orderId: 'SO20250108002',
-      productName: 'PCBA 测试板',
-      materialCode: '104520c',
-      spec: 'PCS',
-      requestQty: 5,
-      actualQty: 5,
-      type: '原料',
-      applicant: '张明',
-      reviewer: '李工',
-      warehouse: '王仓管',
-      status: '待审核',
-      createDate: '2025-03-09'
-    },
-    {
-      id: 'T0001804',
-      orderId: 'SO20250108003',
-      productName: '逆变器组件',
-      materialCode: '205630d',
-      spec: 'SET',
-      requestQty: 10,
-      actualQty: 0,
-      type: '材料',
-      applicant: '李四',
-      reviewer: '',
-      warehouse: '',
-      status: '待领取',
-      createDate: '2025-03-08'
-    }
+  // 2.2 货品管理
+  products: [
+    { id: 'P001', code: 'INV-50K-3P', name: 'PCBA逆变器50KW三相', category: '逆变器', unit: '台', spec: '50KW/三相', weight: 35, price: 12000, safetyStock: 50, status: '正常' },
+    { id: 'P002', code: 'INV-5K-1P', name: '小功率逆变器5KW', category: '逆变器', unit: '台', spec: '5KW/单相', weight: 8, price: 3500, safetyStock: 100, status: '正常' },
+    { id: 'P003', code: 'INV-3K-1P', name: '小功率逆变器3KW', category: '逆变器', unit: '台', spec: '3KW/单相', weight: 5, price: 2500, safetyStock: 150, status: '正常' },
+    { id: 'P004', code: 'PCBA-TEST', name: 'PCBA测试板', category: '配件', unit: '片', spec: '标准', weight: 0.2, price: 180, safetyStock: 500, status: '正常' }
   ],
 
-  // 库存数据
-  inventory: [
-    {
-      materialCode: '8107020428',
-      materialName: '贴片电阻 10K',
-      spec: '0603',
-      unit: 'PCS',
-      currentStock: 45200,
-      safetyStock: 10000,
-      location: 'A-01-01',
-      lastUpdate: '2025-01-08'
-    },
-    {
-      materialCode: '81070300029',
-      materialName: '贴片电阻 4.7K',
-      spec: '0402',
-      unit: 'PCS',
-      currentStock: 32000,
-      safetyStock: 8000,
-      location: 'A-01-02',
-      lastUpdate: '2025-01-07'
-    },
-    {
-      materialCode: '845100693p2',
-      materialName: '贴片电容 100nF',
-      spec: '0603',
-      unit: 'PCS',
-      currentStock: 5000,
-      safetyStock: 15000,
-      location: 'A-02-01',
-      lastUpdate: '2025-01-06',
-      warning: true
-    },
-    {
-      materialCode: '6.0302.209.00',
-      materialName: '单相桥接线材MWBC01A',
-      spec: 'MWVC9815',
-      unit: 'PCS',
-      currentStock: 1200,
-      safetyStock: 500,
-      location: 'B-01-01',
-      lastUpdate: '2025-01-08'
-    }
+  // 2.3 服务商管理（供应商+承运商）
+  serviceProviders: [
+    { id: 'SP001', code: 'SUP-001', name: '深圳电子元器件有限公司', type: '供应商', category: '电子元器件', contact: '张经理', phone: '13800138001', rating: 'A', status: '合作中' },
+    { id: 'SP002', code: 'SUP-002', name: '江苏线材科技有限公司', type: '供应商', category: '线材', contact: '李经理', phone: '13800138002', rating: 'A', status: '合作中' },
+    { id: 'SP003', code: 'CAR-001', name: '顺丰速运', type: '承运商', category: '快递', contact: '王主管', phone: '95338', rating: 'A', status: '合作中' },
+    { id: 'SP004', code: 'CAR-002', name: '德邦物流', type: '承运商', category: '物流', contact: '赵主管', phone: '95353', rating: 'B', status: '合作中' }
   ],
 
-  // 采购订单数据
-  purchaseOrders: [
-    {
-      id: 'PO20250108001',
-      supplier: '深圳电子元器件有限公司',
-      materialCode: '845100693p2',
-      materialName: '贴片电容 100nF',
-      quantity: 50000,
-      unitPrice: 0.02,
-      amount: 1000,
-      orderDate: '2025-01-06',
-      deliveryDate: '2025-01-20',
-      status: '已确认',
-      arrivedQty: 0
-    },
-    {
-      id: 'PO20250108002',
-      supplier: '江苏线材科技有限公司',
-      materialCode: '6.0302.209.00',
-      materialName: '单相桥接线材',
-      quantity: 2000,
-      unitPrice: 5.50,
-      amount: 11000,
-      orderDate: '2025-01-05',
-      deliveryDate: '2025-01-18',
-      status: '运输中',
-      arrivedQty: 0
-    },
-    {
-      id: 'PO20250107001',
-      supplier: '广州电阻厂',
-      materialCode: '8107020428',
-      materialName: '贴片电阻 10K',
-      quantity: 100000,
-      unitPrice: 0.008,
-      amount: 800,
-      orderDate: '2025-01-03',
-      deliveryDate: '2025-01-10',
-      status: '已到货',
-      arrivedQty: 100000
-    }
+  // 2.4 客户管理
+  customers: [
+    { id: 'C001', code: 'CUST-001', name: '泰国分公司', type: '内部客户', level: 'A', contact: 'Mr.Smith', phone: '+66-123456', email: 'smith@thailand.com', address: 'Bangkok, Thailand', status: '正常' },
+    { id: 'C002', code: 'CUST-002', name: '盛能杰ODM', type: 'ODM客户', level: 'A', contact: '陈总', phone: '13900139001', email: 'chen@snj.com', address: '深圳市南山区', status: '正常' },
+    { id: 'C003', code: 'CUST-003', name: '华南区代理', type: '代理商', level: 'B', contact: '林经理', phone: '13900139002', email: 'lin@agent.com', address: '广州市天河区', status: '正常' }
   ],
 
-  // 供应商数据
-  suppliers: [
-    {
-      id: 'SUP001',
-      name: '深圳电子元器件有限公司',
-      contact: '张经理',
-      phone: '13800138001',
-      email: 'zhang@example.com',
-      address: '深圳市宝安区',
-      category: '电容',
-      rating: 'A',
-      status: '合作中'
-    },
-    {
-      id: 'SUP002',
-      name: '江苏线材科技有限公司',
-      contact: '李经理',
-      phone: '13800138002',
-      email: 'li@example.com',
-      address: '江苏省苏州市',
-      category: '线材',
-      rating: 'A',
-      status: '合作中'
-    },
-    {
-      id: 'SUP003',
-      name: '广州电阻厂',
-      contact: '王经理',
-      phone: '13800138003',
-      email: 'wang@example.com',
-      address: '广州市番禺区',
-      category: '电阻',
-      rating: 'B',
-      status: '合作中'
-    }
+  // 2.5 合同管理
+  contracts: [
+    { id: 'CON001', code: 'HT-2025-001', name: '泰国分公司年度采购合同', type: '销售合同', customer: '泰国分公司', amount: 5000000, startDate: '2025-01-01', endDate: '2025-12-31', status: '生效中' },
+    { id: 'CON002', code: 'HT-2025-002', name: '盛能杰ODM合作协议', type: '销售合同', customer: '盛能杰ODM', amount: 3000000, startDate: '2025-01-01', endDate: '2025-06-30', status: '生效中' },
+    { id: 'CON003', code: 'CG-2025-001', name: '顺丰年度物流服务合同', type: '服务合同', customer: '顺丰速运', amount: 500000, startDate: '2025-01-01', endDate: '2025-12-31', status: '生效中' }
   ],
 
-  // 质量检验数据 (IQC)
-  iqcRecords: [
-    {
-      id: 'IQC20250108001',
-      poId: 'PO20250107001',
-      materialCode: '8107020428',
-      materialName: '贴片电阻 10K',
-      supplier: '广州电阻厂',
-      inspectQty: 100000,
-      sampleQty: 200,
-      passQty: 198,
-      failQty: 2,
-      passRate: 99.0,
-      inspector: '刘质检',
-      inspectDate: '2025-01-10',
-      result: '合格',
-      remark: '轻微外观缺陷2件，可接收'
-    },
-    {
-      id: 'IQC20250107001',
-      poId: 'PO20250105001',
-      materialCode: '845100693',
-      materialName: '贴片电容 100nF',
-      supplier: '深圳电子元器件有限公司',
-      inspectQty: 30000,
-      sampleQty: 100,
-      passQty: 100,
-      failQty: 0,
-      passRate: 100,
-      inspector: '张质检',
-      inspectDate: '2025-01-07',
-      result: '合格',
-      remark: ''
-    }
+  // 2.6 订单类型管理
+  orderTypes: [
+    { id: 'OT001', code: 'NORMAL', name: '标准订单', description: '常规销售订单', auditRule: '需审核', splitRule: '允许拆分', customers: ['全部'], status: '启用' },
+    { id: 'OT002', code: 'URGENT', name: '紧急订单', description: '加急处理订单', auditRule: '快速审核', splitRule: '不允许拆分', customers: ['A级客户'], status: '启用' },
+    { id: 'OT003', code: 'SAMPLE', name: '样品订单', description: '样品寄送订单', auditRule: '需审核', splitRule: '不允许拆分', customers: ['全部'], status: '启用' }
   ],
 
-  // 交付跟踪数据
-  deliveryTracking: [
-    {
-      orderId: 'SO20250107001',
-      customerName: '华南区代理',
-      productName: 'PCBA测试板',
-      quantity: 150,
-      deliveryDate: '2025-01-25',
-      shipDate: '2025-01-23',
-      logistics: '顺丰快递',
-      trackingNo: 'SF1234567890',
-      status: '已签收',
-      signDate: '2025-01-25'
-    },
-    {
-      orderId: 'SO20250108001',
-      customerName: '泰国分公司',
-      productName: 'PCBA逆变器',
-      quantity: 100,
-      deliveryDate: '2025-02-15',
-      shipDate: '',
-      logistics: '',
-      trackingNo: '',
-      status: '生产中',
-      signDate: ''
-    }
+  // 2.7 收货人管理
+  consignees: [
+    { id: 'CS001', name: 'Mr.Smith', customer: '泰国分公司', phone: '+66-123456', address: 'Bangkok Factory, Thailand', isDefault: true, status: '正常' },
+    { id: 'CS002', name: '陈经理', customer: '盛能杰ODM', phone: '13900139001', address: '深圳市南山区科技园', isDefault: true, status: '正常' },
+    { id: 'CS003', name: '林经理', customer: '华南区代理', phone: '13900139002', address: '广州市天河区体育中心', isDefault: true, status: '正常' }
   ],
 
-  // 仪表盘统计数据
+  // 二、销售管理 - 销售订单
+  salesOrders: [
+    { id: 'SO2025010001', orderType: '标准订单', customer: '泰国分公司', consignee: 'Mr.Smith', products: [{ code: 'INV-50K-3P', name: 'PCBA逆变器50KW三相', qty: 100, price: 12000 }], totalAmount: 1200000, orderDate: '2025-01-06', deliveryDate: '2025-02-15', status: '已审核', auditUser: '李伟', auditTime: '2025-01-06 14:00' },
+    { id: 'SO2025010002', orderType: '紧急订单', customer: '盛能杰ODM', consignee: '陈经理', products: [{ code: 'INV-5K-1P', name: '小功率逆变器5KW', qty: 200, price: 3500 }], totalAmount: 700000, orderDate: '2025-01-05', deliveryDate: '2025-01-20', status: '待审核', auditUser: '', auditTime: '' },
+    { id: 'SO2025010003', orderType: '标准订单', customer: '华南区代理', consignee: '林经理', products: [{ code: 'INV-3K-1P', name: '小功率逆变器3KW', qty: 500, price: 2500 }], totalAmount: 1250000, orderDate: '2025-01-04', deliveryDate: '2025-02-28', status: '已拆分', auditUser: '李伟', auditTime: '2025-01-04 16:00' },
+    { id: 'SO2025010004', orderType: '标准订单', customer: '泰国分公司', consignee: 'Mr.Smith', products: [{ code: 'PCBA-TEST', name: 'PCBA测试板', qty: 1000, price: 180 }], totalAmount: 180000, orderDate: '2025-01-03', deliveryDate: '2025-01-25', status: '已发货', auditUser: '李伟', auditTime: '2025-01-03 10:00' },
+    { id: 'SO2025010005', orderType: '标准订单', customer: '盛能杰ODM', consignee: '陈经理', products: [{ code: 'INV-50K-3P', name: 'PCBA逆变器50KW三相', qty: 50, price: 12000 }], totalAmount: 600000, orderDate: '2025-01-02', deliveryDate: '2025-01-30', status: '已完成', auditUser: '李伟', auditTime: '2025-01-02 09:00' }
+  ],
+
+  // 三、交货单管理
+  deliveryOrders: [
+    { id: 'DO2025010001', salesOrderId: 'SO2025010004', customer: '泰国分公司', consignee: 'Mr.Smith', products: [{ code: 'PCBA-TEST', name: 'PCBA测试板', qty: 1000 }], carrier: '顺丰速运', trackingNo: 'SF1234567890', createTime: '2025-01-20', shipTime: '2025-01-21', status: '已签收' },
+    { id: 'DO2025010002', salesOrderId: 'SO2025010005', customer: '盛能杰ODM', consignee: '陈经理', products: [{ code: 'INV-50K-3P', name: 'PCBA逆变器50KW三相', qty: 50 }], carrier: '德邦物流', trackingNo: 'DB9876543210', createTime: '2025-01-25', shipTime: '2025-01-26', status: '已签收' },
+    { id: 'DO2025010003', salesOrderId: 'SO2025010001', customer: '泰国分公司', consignee: 'Mr.Smith', products: [{ code: 'INV-50K-3P', name: 'PCBA逆变器50KW三相', qty: 100 }], carrier: '', trackingNo: '', createTime: '2025-01-08', shipTime: '', status: '待发货' }
+  ],
+
+  // 四、S&OP计划
+  sopDemands: [
+    { id: 'DM202501', period: '2025年1月', product: 'INV-50K-3P', productName: 'PCBA逆变器50KW三相', orderQty: 150, forecastQty: 50, totalDemand: 200, stock: 80, gap: 120, priority: '高' },
+    { id: 'DM202502', period: '2025年1月', product: 'INV-5K-1P', productName: '小功率逆变器5KW', orderQty: 200, forecastQty: 100, totalDemand: 300, stock: 150, gap: 150, priority: '高' },
+    { id: 'DM202503', period: '2025年1月', product: 'INV-3K-1P', productName: '小功率逆变器3KW', orderQty: 500, forecastQty: 200, totalDemand: 700, stock: 400, gap: 300, priority: '中' }
+  ],
+
+  sopPlans: [
+    { id: 'SP202501', version: 'V1.0', period: '2025年1月', createTime: '2025-01-05', status: '已确认', creator: '赵强', summary: '1月需求计划已与生产协调确认' }
+  ],
+
+  // 五、报表模板
+  reportTemplates: [
+    { id: 'RPT001', name: '销售订单月报', type: '订单报表', fields: ['订单号', '客户', '产品', '金额', '状态'], createUser: '张明', createTime: '2024-12-01', status: '启用' },
+    { id: 'RPT002', name: '交货及时率报表', type: 'OT报表', fields: ['订单号', '客户', '计划交期', '实际交期', '是否及时'], createUser: '张明', createTime: '2024-12-01', status: '启用' },
+    { id: 'RPT003', name: '客户订单汇总', type: '汇总报表', fields: ['客户', '订单数', '总金额', '完成率'], createUser: '李伟', createTime: '2024-12-15', status: '启用' }
+  ],
+
+  // 仪表盘统计
   dashboardStats: {
-    todayOrders: 12,
-    todayOrdersChange: 20,
-    pendingOrders: 8,
-    pendingOrdersChange: -5,
-    inProduction: 15,
-    inProductionChange: 10,
-    monthlyDelivery: 156,
-    monthlyDeliveryChange: 15,
-    deliveryRate: 96.5,
-    qualityRate: 99.2
+    todayOrders: 12, pendingAudit: 5, inDelivery: 8, completedMonth: 156,
+    onTimeRate: 96.5, orderAmount: 5200000, demandGap: 570
   }
 };
 
-// 数据操作方法
+// 数据服务
 const DataService = {
-  // 获取订单列表
-  getOrders(filters = {}) {
-    let result = [...MockData.orders];
-    if (filters.status) {
-      result = result.filter(o => o.status === filters.status);
-    }
-    if (filters.keyword) {
-      const kw = filters.keyword.toLowerCase();
-      result = result.filter(o => 
-        o.id.toLowerCase().includes(kw) || 
-        o.customerName.toLowerCase().includes(kw) ||
-        o.productName.toLowerCase().includes(kw)
-      );
-    }
-    return result;
-  },
+  getUsers: (f = {}) => MockData.users.filter(u => !f.status || u.status === f.status),
+  getRoles: () => [...MockData.roles],
+  getRules: () => [...MockData.rules],
+  getWarehouses: () => [...MockData.warehouses],
+  getProducts: () => [...MockData.products],
+  getServiceProviders: (f = {}) => MockData.serviceProviders.filter(s => !f.type || s.type === f.type),
+  getCustomers: () => [...MockData.customers],
+  getContracts: () => [...MockData.contracts],
+  getOrderTypes: () => [...MockData.orderTypes],
+  getConsignees: () => [...MockData.consignees],
+  getSalesOrders: (f = {}) => MockData.salesOrders.filter(o => !f.status || o.status === f.status),
+  getSalesOrderById: (id) => MockData.salesOrders.find(o => o.id === id),
+  getDeliveryOrders: (f = {}) => MockData.deliveryOrders.filter(d => !f.status || d.status === f.status),
+  getSOPDemands: () => [...MockData.sopDemands],
+  getSOPPlans: () => [...MockData.sopPlans],
+  getReportTemplates: () => [...MockData.reportTemplates],
+  getDashboardStats: () => ({ ...MockData.dashboardStats }),
+  getCurrentUser: () => ({ ...MockData.currentUser }),
 
-  // 获取订单详情
-  getOrderById(id) {
-    return MockData.orders.find(o => o.id === id);
-  },
-
-  // 添加订单
-  addOrder(order) {
-    const newOrder = {
-      ...order,
-      id: 'SO' + new Date().toISOString().slice(0, 10).replace(/-/g, '') + String(MockData.orders.length + 1).padStart(3, '0'),
-      status: '待确认',
-      progress: 0
-    };
-    MockData.orders.unshift(newOrder);
+  addSalesOrder: (order) => {
+    const newOrder = { ...order, id: 'SO' + Date.now(), status: '待审核', orderDate: new Date().toISOString().slice(0, 10) };
+    MockData.salesOrders.unshift(newOrder);
     return newOrder;
   },
-
-  // 更新订单
-  updateOrder(id, data) {
-    const index = MockData.orders.findIndex(o => o.id === id);
-    if (index !== -1) {
-      MockData.orders[index] = { ...MockData.orders[index], ...data };
-      return MockData.orders[index];
-    }
+  updateSalesOrder: (id, data) => {
+    const idx = MockData.salesOrders.findIndex(o => o.id === id);
+    if (idx !== -1) { MockData.salesOrders[idx] = { ...MockData.salesOrders[idx], ...data }; return MockData.salesOrders[idx]; }
     return null;
   },
-
-  // 删除订单
-  deleteOrder(id) {
-    const index = MockData.orders.findIndex(o => o.id === id);
-    if (index !== -1) {
-      MockData.orders.splice(index, 1);
-      return true;
-    }
+  deleteSalesOrder: (id) => {
+    const idx = MockData.salesOrders.findIndex(o => o.id === id);
+    if (idx !== -1) { MockData.salesOrders.splice(idx, 1); return true; }
     return false;
   },
-
-  // 获取生产计划
-  getProductionPlans(filters = {}) {
-    let result = [...MockData.productionPlans];
-    if (filters.status) {
-      result = result.filter(p => p.status === filters.status);
-    }
-    return result;
-  },
-
-  // 获取工单列表
-  getWorkOrders(filters = {}) {
-    let result = [...MockData.workOrders];
-    if (filters.status) {
-      result = result.filter(w => w.status === filters.status);
-    }
-    return result;
-  },
-
-  // 获取送检单
-  getInspectionOrders(filters = {}) {
-    let result = [...MockData.inspectionOrders];
-    if (filters.status) {
-      result = result.filter(i => i.status === filters.status);
-    }
-    return result;
-  },
-
-  // 获取领料单
-  getMaterialRequests(filters = {}) {
-    let result = [...MockData.materialRequests];
-    if (filters.status) {
-      result = result.filter(m => m.status === filters.status);
-    }
-    return result;
-  },
-
-  // 获取库存
-  getInventory(filters = {}) {
-    let result = [...MockData.inventory];
-    if (filters.warning) {
-      result = result.filter(i => i.currentStock < i.safetyStock);
-    }
-    return result;
-  },
-
-  // 获取采购订单
-  getPurchaseOrders(filters = {}) {
-    let result = [...MockData.purchaseOrders];
-    if (filters.status) {
-      result = result.filter(p => p.status === filters.status);
-    }
-    return result;
-  },
-
-  // 获取供应商
-  getSuppliers() {
-    return [...MockData.suppliers];
-  },
-
-  // 获取IQC记录
-  getIQCRecords(filters = {}) {
-    let result = [...MockData.iqcRecords];
-    if (filters.result) {
-      result = result.filter(i => i.result === filters.result);
-    }
-    return result;
-  },
-
-  // 获取交付跟踪
-  getDeliveryTracking() {
-    return [...MockData.deliveryTracking];
-  },
-
-  // 获取仪表盘数据
-  getDashboardStats() {
-    return { ...MockData.dashboardStats };
-  },
-
-  // 获取当前用户
-  getCurrentUser() {
-    return { ...MockData.currentUser };
+  addDeliveryOrder: (order) => {
+    const newOrder = { ...order, id: 'DO' + Date.now(), status: '待发货', createTime: new Date().toISOString().slice(0, 10) };
+    MockData.deliveryOrders.unshift(newOrder);
+    return newOrder;
   }
 };
 
-// 导出
 window.MockData = MockData;
 window.DataService = DataService;
