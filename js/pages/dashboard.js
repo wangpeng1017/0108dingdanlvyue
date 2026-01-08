@@ -49,27 +49,67 @@ Pages['dashboard'] = {
       </div>
       
       <div class="content-card">
-        <div class="card-header"><h3 class="card-title">待办事项</h3></div>
-        <div class="todo-list">
-          <div class="todo-item warning" onclick="App.loadPage('order-list')">
-            <span class="todo-icon">📋</span>
-            <span class="todo-text">5个订单待审核</span>
-            <span class="todo-action">去处理</span>
+        <div class="card-header">
+          <h3 class="card-title">待办事项</h3>
+          <span style="font-size:12px;color:var(--text-secondary)">共 <strong style="color:var(--primary-color)">16</strong> 项</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="todo-card" onclick="App.loadPage('order-list')" style="cursor:pointer;border-left:3px solid var(--warning-color)">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);display:flex;align-items:center;justify-content:center;font-size:24px">📋</div>
+              <div style="flex:1">
+                <div style="font-weight:500;color:var(--text-primary);margin-bottom:4px">订单待审核</div>
+                <div style="font-size:12px;color:var(--text-secondary)">需要尽快处理审核流程</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px">
+                <span style="display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:32px;padding:0 10px;background:var(--warning-color);color:#fff;border-radius:16px;font-weight:600;font-size:14px">5</span>
+                <span style="color:var(--primary-color);font-size:20px">›</span>
+              </div>
+            </div>
           </div>
-          <div class="todo-item error" onclick="App.loadPage('sop-tracking')">
-            <span class="todo-icon">⚠️</span>
-            <span class="todo-text">3个交期预警</span>
-            <span class="todo-action">查看</span>
+          
+          <div class="todo-card" onclick="App.loadPage('sop-tracking')" style="cursor:pointer;border-left:3px solid var(--error-color)">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);display:flex;align-items:center;justify-content:center;font-size:24px">⚠️</div>
+              <div style="flex:1">
+                <div style="font-weight:500;color:var(--text-primary);margin-bottom:4px;display:flex;align-items:center;gap:6px">
+                  交期预警
+                  <span style="font-size:10px;padding:2px 6px;background:var(--error-color);color:#fff;border-radius:10px">紧急</span>
+                </div>
+                <div style="font-size:12px;color:var(--text-secondary)">有订单可能延期交付</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px">
+                <span style="display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:32px;padding:0 10px;background:var(--error-color);color:#fff;border-radius:16px;font-weight:600;font-size:14px">3</span>
+                <span style="color:var(--primary-color);font-size:20px">›</span>
+              </div>
+            </div>
           </div>
-          <div class="todo-item info" onclick="App.loadPage('delivery-list')">
-            <span class="todo-icon">🚚</span>
-            <span class="todo-text">8个交货单待发货</span>
-            <span class="todo-action">处理</span>
+          
+          <div class="todo-card" onclick="App.loadPage('delivery-list')" style="cursor:pointer;border-left:3px solid var(--info-color)">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);display:flex;align-items:center;justify-content:center;font-size:24px">🚚</div>
+              <div style="flex:1">
+                <div style="font-weight:500;color:var(--text-primary);margin-bottom:4px">交货单待发货</div>
+                <div style="font-size:12px;color:var(--text-secondary)">安排物流发货</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px">
+                <span style="display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:32px;padding:0 10px;background:var(--info-color);color:#fff;border-radius:16px;font-weight:600;font-size:14px">8</span>
+                <span style="color:var(--primary-color);font-size:20px">›</span>
+              </div>
+            </div>
           </div>
-          <div class="todo-item success" onclick="App.loadPage('sop-coordinate')">
-            <span class="todo-icon">📊</span>
-            <span class="todo-text">S&OP计划待确认</span>
-            <span class="todo-action">查看</span>
+          
+          <div class="todo-card" onclick="App.loadPage('sop-coordinate')" style="cursor:pointer;border-left:3px solid var(--success-color)">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);display:flex;align-items:center;justify-content:center;font-size:24px">📊</div>
+              <div style="flex:1">
+                <div style="font-weight:500;color:var(--text-primary);margin-bottom:4px">S&OP计划待确认</div>
+                <div style="font-size:12px;color:var(--text-secondary)">本周计划需要协调确认</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px">
+                <span style="color:var(--primary-color);font-size:20px">›</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
