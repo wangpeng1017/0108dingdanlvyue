@@ -60,13 +60,14 @@ const Modal = {
             content: `<div class="confirm-content"><span class="confirm-icon ${type}">${icons[type]}</span><div class="confirm-message"><div class="confirm-desc">${message}</div></div></div>`
         });
     },
-    close() { if (this.currentModal) { this.currentModal.classList.remove('show'); setTimeout(() => { if (this.currentModal) { this.currentModal.remove(); this.currentModal = null; } }, 300); } }
+    close() { if (this.currentModal) { this.currentModal.classList.remove('show'); setTimeout(() => { if (this.currentModal) { this.currentModal.remove(); this.currentModal = null; } }, 300); } },
+    closeAll() { document.querySelectorAll('.modal-overlay').forEach(m => { m.classList.remove('show'); setTimeout(() => m.remove(), 300); }); this.currentModal = null; }
 };
 
 // 表格组件
 const Table = {
     render(containerId, options) {
-        const { columns = [], data = [], showCheckbox = false, showIndex = false, emptyText = '暂无数据' } = options;
+        const { columns = [], data = [], showCheckbox = false, showIndex = false, emptyText = '暂无数据', onSelect = null, indexOffset = 0 } = options;
         const container = document.getElementById(containerId);
         if (!container) return;
         if (data.length === 0) { container.innerHTML = `<div class="table-empty"><div class="table-empty-icon">📋</div><div>${emptyText}</div></div>`; return; }
@@ -77,15 +78,15 @@ const Table = {
     </tr></thead><tbody>
       ${data.map((row, i) => `<tr data-id="${row.id || i}">
         ${showCheckbox ? '<td><input type="checkbox" class="row-checkbox"></td>' : ''}
-        ${showIndex ? `<td class="text-center">${i + 1}</td>` : ''}
+        ${showIndex ? `<td class="text-center">${indexOffset + i + 1}</td>` : ''}
         ${columns.map(c => { let v = row[c.key]; if (c.render) v = c.render(v, row, i); return `<td class="${c.align ? 'text-' + c.align : ''}">${v ?? '-'}</td>`; }).join('')}
       </tr>`).join('')}
     </tbody></table></div>`;
         if (showCheckbox) {
             const selectAll = container.querySelector('.select-all');
             const cbs = container.querySelectorAll('.row-checkbox');
-            selectAll.addEventListener('change', e => cbs.forEach(c => c.checked = e.target.checked));
-            cbs.forEach(c => c.addEventListener('change', () => selectAll.checked = Array.from(cbs).every(x => x.checked)));
+            selectAll.addEventListener('change', e => { cbs.forEach(c => c.checked = e.target.checked); if (onSelect) onSelect(); });
+            cbs.forEach(c => c.addEventListener('change', () => { selectAll.checked = Array.from(cbs).every(x => x.checked); if (onSelect) onSelect(); }));
         }
     },
     getSelected(containerId) {
