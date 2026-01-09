@@ -2,44 +2,44 @@
 
 // 报表模板管理
 Pages['report-template'] = {
-    template: `
+  template: `
     <div class="page-header"><h1 class="page-title">报表模板</h1><p class="page-desc">可视化报表模板设计与管理</p></div>
     <div class="content-card">
       <div class="table-toolbar"><div class="table-toolbar-left"><button class="btn btn-primary" onclick="Pages['report-template'].create()">+ 新建模板</button></div></div>
       <div id="template-table"></div>
     </div>`,
-    init() {
-        Table.render('template-table', {
-            columns: [
-                { key: 'id', title: '模板ID', width: '100px' },
-                { key: 'name', title: '模板名称' },
-                { key: 'type', title: '类型' },
-                { key: 'fields', title: '字段', render: v => v.slice(0, 3).join('、') + (v.length > 3 ? '...' : '') },
-                { key: 'createUser', title: '创建人' },
-                { key: 'createTime', title: '创建时间' },
-                { key: 'status', title: '状态', render: v => Format.status(v, { '启用': { text: '启用', type: 'success' }, '禁用': { text: '禁用', type: 'default' } }) },
-                { key: 'actions', title: '操作', width: '180px', render: (_, row) => `<div class="table-actions"><button class="btn btn-link" onclick="Pages['report-template'].design('${row.id}')">设计</button><button class="btn btn-link" onclick="Pages['report-template'].preview('${row.id}')">预览</button><button class="btn btn-link" onclick="Pages['report-template'].edit('${row.id}')">编辑</button></div>` }
-            ],
-            data: DataService.getReportTemplates(), showIndex: true
-        });
-    },
-    create() {
-        Modal.create({
-            title: '新建报表模板',
-            size: 'lg',
-            content: `<form class="modal-form">
+  init() {
+    Table.render('template-table', {
+      columns: [
+        { key: 'id', title: '模板ID', width: '100px' },
+        { key: 'name', title: '模板名称' },
+        { key: 'type', title: '类型' },
+        { key: 'fields', title: '字段', render: v => v.slice(0, 3).join('、') + (v.length > 3 ? '...' : '') },
+        { key: 'createUser', title: '创建人' },
+        { key: 'createTime', title: '创建时间' },
+        { key: 'status', title: '状态', render: v => Format.status(v, { '启用': { text: '启用', type: 'success' }, '禁用': { text: '禁用', type: 'default' } }) },
+        { key: 'actions', title: '操作', width: '180px', render: (_, row) => `<div class="table-actions"><button class="btn btn-link" onclick="Pages['report-template'].design('${row.id}')">设计</button><button class="btn btn-link" onclick="Pages['report-template'].preview('${row.id}')">预览</button><button class="btn btn-link" onclick="Pages['report-template'].edit('${row.id}')">编辑</button></div>` }
+      ],
+      data: DataService.getReportTemplates(), showIndex: true
+    });
+  },
+  create() {
+    Modal.create({
+      title: '新建报表模板',
+      size: 'lg',
+      content: `<form class="modal-form">
         <div class="form-row"><label class="form-label required">模板名称</label><div class="form-content"><input type="text" class="form-control" required></div></div>
         <div class="form-row"><label class="form-label required">报表类型</label><div class="form-content"><select class="form-control form-select"><option>订单报表</option><option>OT报表</option><option>汇总报表</option><option>明细报表</option></select></div></div>
         <div class="form-row"><label class="form-label">描述</label><div class="form-content"><textarea class="form-control" rows="2"></textarea></div></div>
       </form>`,
-            onOk: () => { Message.success('模板创建成功'); Pages['report-template'].design('new'); }
-        });
-    },
-    design(id) {
-        Modal.create({
-            title: '报表设计器',
-            size: 'lg',
-            content: `
+      onOk: () => { Message.success('模板创建成功'); Pages['report-template'].design('new'); }
+    });
+  },
+  design(id) {
+    Modal.create({
+      title: '报表设计器',
+      size: 'lg',
+      content: `
         <div style="display:flex;gap:16px;height:400px">
           <div style="width:200px;border:1px solid var(--border-color);border-radius:4px;padding:12px;overflow-y:auto">
             <div style="font-weight:500;margin-bottom:12px">可用字段</div>
@@ -61,16 +61,16 @@ Pages['report-template'] = {
           </div>
         </div>
       `,
-            okText: '保存模板',
-            onOk: () => Message.success('模板保存成功')
-        });
-    },
-    preview(id) {
-        Modal.create({
-            title: '报表预览',
-            size: 'lg',
-            showFooter: false,
-            content: `
+      okText: '保存模板',
+      onOk: () => Message.success('模板保存成功')
+    });
+  },
+  preview(id) {
+    Modal.create({
+      title: '报表预览',
+      size: 'lg',
+      showFooter: false,
+      content: `
         <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
           <span style="font-weight:500">销售订单月报 - 2025年1月</span>
           <div><button class="btn btn-default btn-sm" onclick="Message.success('已导出Excel')">📥 导出Excel</button><button class="btn btn-default btn-sm" onclick="Message.success('已导出PDF')">📄 导出PDF</button></div>
@@ -83,19 +83,19 @@ Pages['report-template'] = {
           <tfoot><tr><td colspan="3" style="text-align:right;font-weight:500">合计</td><td style="font-weight:600;color:var(--primary-color)">${Format.currency(DataService.getSalesOrders().reduce((s, o) => s + o.totalAmount, 0))}</td><td></td></tr></tfoot>
         </table>
       `
-        });
-    },
-    edit(id) { Modal.create({ title: '编辑模板', content: '<p>编辑模板信息...</p>', onOk: () => Message.success('保存成功') }); }
+    });
+  },
+  edit(id) { Modal.create({ title: '编辑模板', content: '<p>编辑模板信息...</p>', onOk: () => Message.success('保存成功') }); }
 };
 
 // 报表查询与分析
 Pages['report-query'] = {
-    template: `
+  template: `
     <div class="page-header"><h1 class="page-title">报表查询</h1><p class="page-desc">多维度报表查询与数据分析</p></div>
     
     <div class="search-bar">
       <div class="search-item"><label>报表类型</label><select class="form-control form-select" id="report-type" onchange="Pages['report-query'].changeType()"><option value="order">销售订单报表</option><option value="ot">OT交货及时率</option><option value="customer">客户汇总报表</option></select></div>
-      <div class="search-item"><label>时间范围</label><input type="date" class="form-control" style="width:130px" value="2025-01-01"> - <input type="date" class="form-control" style="width:130px" value="2025-01-31"></div>
+      <div class="search-item"><label>时间范围</label><div style="display:flex;align-items:center;gap:8px"><input type="date" class="form-control" style="width:130px" value="2025-01-01"><span style="color:var(--text-secondary)">-</span><input type="date" class="form-control" style="width:130px" value="2025-01-31"></div></div>
       <div class="search-item"><label>客户</label><select class="form-control form-select"><option value="">全部</option>${DataService.getCustomers().map(c => `<option>${c.name}</option>`).join('')}</select></div>
       <div class="search-actions"><button class="btn btn-primary" onclick="Pages['report-query'].query()">🔍 查询</button><button class="btn btn-default" onclick="Pages['report-query'].export()">📥 导出</button></div>
     </div>
@@ -109,18 +109,18 @@ Pages['report-query'] = {
       <div class="card-header"><h3 class="card-title">报表数据</h3></div>
       <div id="report-result"></div>
     </div>`,
-    init() {
-        this.renderOrderReport();
-    },
-    changeType() {
-        const type = document.getElementById('report-type').value;
-        if (type === 'order') this.renderOrderReport();
-        else if (type === 'ot') this.renderOTReport();
-        else if (type === 'customer') this.renderCustomerReport();
-    },
-    renderOrderReport() {
-        document.getElementById('report-charts').style.display = 'block';
-        document.getElementById('chart-container').innerHTML = `
+  init() {
+    this.renderOrderReport();
+  },
+  changeType() {
+    const type = document.getElementById('report-type').value;
+    if (type === 'order') this.renderOrderReport();
+    else if (type === 'ot') this.renderOTReport();
+    else if (type === 'customer') this.renderCustomerReport();
+  },
+  renderOrderReport() {
+    document.getElementById('report-charts').style.display = 'block';
+    document.getElementById('chart-container').innerHTML = `
       <div style="flex:1;min-width:300px;text-align:center">
         <div style="font-weight:500;margin-bottom:16px">订单状态分布</div>
         <div style="display:flex;justify-content:center;align-items:center;gap:8px">
@@ -143,22 +143,22 @@ Pages['report-query'] = {
       </div>
     `;
 
-        Table.render('report-result', {
-            columns: [
-                { key: 'id', title: '订单编号' },
-                { key: 'customer', title: '客户' },
-                { key: 'products', title: '产品', render: v => v[0]?.name },
-                { key: 'totalAmount', title: '金额', align: 'right', render: v => Format.currency(v) },
-                { key: 'orderDate', title: '订单日期' },
-                { key: 'deliveryDate', title: '交货日期' },
-                { key: 'status', title: '状态', render: v => Format.status(v, { '待审核': { text: '待审核', type: 'warning' }, '已审核': { text: '已审核', type: 'info' }, '已完成': { text: '已完成', type: 'success' } }) }
-            ],
-            data: DataService.getSalesOrders()
-        });
-    },
-    renderOTReport() {
-        document.getElementById('report-charts').style.display = 'block';
-        document.getElementById('chart-container').innerHTML = `
+    Table.render('report-result', {
+      columns: [
+        { key: 'id', title: '订单编号' },
+        { key: 'customer', title: '客户' },
+        { key: 'products', title: '产品', render: v => v[0]?.name },
+        { key: 'totalAmount', title: '金额', align: 'right', render: v => Format.currency(v) },
+        { key: 'orderDate', title: '订单日期' },
+        { key: 'deliveryDate', title: '交货日期' },
+        { key: 'status', title: '状态', render: v => Format.status(v, { '待审核': { text: '待审核', type: 'warning' }, '已审核': { text: '已审核', type: 'info' }, '已完成': { text: '已完成', type: 'success' } }) }
+      ],
+      data: DataService.getSalesOrders()
+    });
+  },
+  renderOTReport() {
+    document.getElementById('report-charts').style.display = 'block';
+    document.getElementById('chart-container').innerHTML = `
       <div style="flex:1;min-width:300px;text-align:center">
         <div style="font-weight:500;margin-bottom:16px">交货及时率</div>
         <div style="font-size:48px;font-weight:600;color:var(--success-color)">96.5%</div>
@@ -171,7 +171,7 @@ Pages['report-query'] = {
       </div>
     `;
 
-        document.getElementById('report-result').innerHTML = `
+    document.getElementById('report-result').innerHTML = `
       <table class="data-table">
         <thead><tr><th>订单编号</th><th>客户</th><th>计划交期</th><th>实际交期</th><th>延期天数</th><th>是否及时</th></tr></thead>
         <tbody>
@@ -181,10 +181,10 @@ Pages['report-query'] = {
         </tbody>
       </table>
     `;
-    },
-    renderCustomerReport() {
-        document.getElementById('report-charts').style.display = 'block';
-        document.getElementById('chart-container').innerHTML = `
+  },
+  renderCustomerReport() {
+    document.getElementById('report-charts').style.display = 'block';
+    document.getElementById('chart-container').innerHTML = `
       <div style="flex:1;min-width:300px;text-align:center">
         <div style="font-weight:500;margin-bottom:16px">客户订单金额占比</div>
         <div style="display:flex;justify-content:center;gap:16px">
@@ -193,7 +193,7 @@ Pages['report-query'] = {
       </div>
     `;
 
-        document.getElementById('report-result').innerHTML = `
+    document.getElementById('report-result').innerHTML = `
       <table class="data-table">
         <thead><tr><th>客户</th><th>订单数</th><th>总金额</th><th>已完成金额</th><th>完成率</th></tr></thead>
         <tbody>
@@ -204,7 +204,7 @@ Pages['report-query'] = {
         <tfoot><tr style="font-weight:500"><td>合计</td><td>10</td><td>¥4,930,000</td><td>¥1,800,000</td><td>36.5%</td></tr></tfoot>
       </table>
     `;
-    },
-    query() { Loading.show(); setTimeout(() => { Loading.hide(); Message.success('查询完成'); }, 500); },
-    export() { Message.success('报表导出成功'); }
+  },
+  query() { Loading.show(); setTimeout(() => { Loading.hide(); Message.success('查询完成'); }, 500); },
+  export() { Message.success('报表导出成功'); }
 };
