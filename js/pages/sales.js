@@ -387,12 +387,42 @@ Pages['order-list'] = {
       onOk: () => {
         Loading.show();
         setTimeout(() => {
+          // 创建交货单1
+          const deliveryOrder1 = DataService.addDeliveryOrder({
+            salesOrderId: id,
+            customer: o.customer,
+            consignee: o.consignee,
+            products: [{
+              code: o.products[0].code,
+              name: o.products[0].name,
+              qty: Math.ceil(o.products[0].qty / 2)
+            }],
+            carrier: '',
+            trackingNo: ''
+          });
+
+          // 创建交货单2
+          const deliveryOrder2 = DataService.addDeliveryOrder({
+            salesOrderId: id,
+            customer: o.customer,
+            consignee: o.consignee,
+            products: [{
+              code: o.products[0].code,
+              name: o.products[0].name,
+              qty: Math.floor(o.products[0].qty / 2)
+            }],
+            carrier: '',
+            trackingNo: ''
+          });
+
+          // 更新订单状态为已拆分
           DataService.updateSalesOrder(id, { status: '已拆分' });
+
           this.data = DataService.getSalesOrders();
           this.filteredData = [...this.data];
           this.renderTable();
           Loading.hide();
-          Message.success('订单拆分成功，生成2个子订单');
+          Message.success(`订单拆分成功,生成交货单: ${deliveryOrder1.id}, ${deliveryOrder2.id}`);
         }, 800);
       }
     });

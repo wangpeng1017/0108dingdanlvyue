@@ -229,48 +229,243 @@ const MockData = {
   }
 };
 
-// 数据服务
+// 数据服务 - 支持 LocalStorage 持久化
 const DataService = {
-  getUsers: (f = {}) => MockData.users.filter(u => !f.status || u.status === f.status),
-  getRoles: () => [...MockData.roles],
-  getRules: () => [...MockData.rules],
-  getWarehouses: () => [...MockData.warehouses],
-  getProducts: () => [...MockData.products],
-  getServiceProviders: (f = {}) => MockData.serviceProviders.filter(s => !f.type || s.type === f.type),
-  getCustomers: () => [...MockData.customers],
-  getContracts: () => [...MockData.contracts],
-  getOrderTypes: () => [...MockData.orderTypes],
-  getConsignees: () => [...MockData.consignees],
-  getSalesOrders: (f = {}) => MockData.salesOrders.filter(o => !f.status || o.status === f.status),
-  getSalesOrderById: (id) => MockData.salesOrders.find(o => o.id === id),
-  getDeliveryOrders: (f = {}) => MockData.deliveryOrders.filter(d => !f.status || d.status === f.status),
-  getSOPDemands: () => [...MockData.sopDemands],
-  getSOPPlans: () => [...MockData.sopPlans],
-  getReportTemplates: () => [...MockData.reportTemplates],
-  getDashboardStats: () => ({ ...MockData.dashboardStats }),
+  // 初始化数据
+  init() {
+    // 如果是首次运行,初始化演示数据
+    if (StorageService.initDemoData()) {
+      // 保存所有初始数据到 LocalStorage
+      this.saveAllData();
+    }
+  },
+
+  // 保存所有数据到 LocalStorage
+  saveAllData() {
+    StorageService.save('users', MockData.users);
+    StorageService.save('roles', MockData.roles);
+    StorageService.save('rules', MockData.rules);
+    StorageService.save('warehouses', MockData.warehouses);
+    StorageService.save('products', MockData.products);
+    StorageService.save('serviceProviders', MockData.serviceProviders);
+    StorageService.save('customers', MockData.customers);
+    StorageService.save('contracts', MockData.contracts);
+    StorageService.save('orderTypes', MockData.orderTypes);
+    StorageService.save('consignees', MockData.consignees);
+    StorageService.save('salesOrders', MockData.salesOrders);
+    StorageService.save('deliveryOrders', MockData.deliveryOrders);
+    StorageService.save('sopDemands', MockData.sopDemands);
+    StorageService.save('sopPlans', MockData.sopPlans);
+    StorageService.save('reportTemplates', MockData.reportTemplates);
+    StorageService.save('dashboardStats', MockData.dashboardStats);
+  },
+
+  // 获取方法
+  getUsers: (f = {}) => {
+    const users = StorageService.load('users', MockData.users);
+    return users.filter(u => !f.status || u.status === f.status);
+  },
+  getRoles: () => StorageService.load('roles', MockData.roles),
+  getRules: () => StorageService.load('rules', MockData.rules),
+  getWarehouses: () => StorageService.load('warehouses', MockData.warehouses),
+  getProducts: () => StorageService.load('products', MockData.products),
+  getServiceProviders: (f = {}) => {
+    const providers = StorageService.load('serviceProviders', MockData.serviceProviders);
+    return providers.filter(s => !f.type || s.type === f.type);
+  },
+  getCustomers: () => StorageService.load('customers', MockData.customers),
+  getContracts: () => StorageService.load('contracts', MockData.contracts),
+  getOrderTypes: () => StorageService.load('orderTypes', MockData.orderTypes),
+  getConsignees: () => StorageService.load('consignees', MockData.consignees),
+  getSalesOrders: (f = {}) => {
+    const orders = StorageService.load('salesOrders', MockData.salesOrders);
+    return orders.filter(o => !f.status || o.status === f.status);
+  },
+  getSalesOrderById: (id) => {
+    const orders = StorageService.load('salesOrders', MockData.salesOrders);
+    return orders.find(o => o.id === id);
+  },
+  getDeliveryOrders: (f = {}) => {
+    const orders = StorageService.load('deliveryOrders', MockData.deliveryOrders);
+    return orders.filter(d => !f.status || d.status === f.status);
+  },
+  getSOPDemands: () => StorageService.load('sopDemands', MockData.sopDemands),
+  getSOPPlans: () => StorageService.load('sopPlans', MockData.sopPlans),
+  getReportTemplates: () => StorageService.load('reportTemplates', MockData.reportTemplates),
+  getDashboardStats: () => StorageService.load('dashboardStats', MockData.dashboardStats),
   getCurrentUser: () => ({ ...MockData.currentUser }),
 
+  // 销售订单操作
   addSalesOrder: (order) => {
-    const newOrder = { ...order, id: 'SO' + Date.now(), status: '待审核', orderDate: new Date().toISOString().slice(0, 10) };
-    MockData.salesOrders.unshift(newOrder);
+    const orders = StorageService.load('salesOrders', MockData.salesOrders);
+    const newOrder = {
+      ...order,
+      id: 'SO' + Date.now(),
+      status: '待审核',
+      orderDate: new Date().toISOString().slice(0, 10),
+      deliveryOrders: [] // 关联的交货单
+    };
+    orders.unshift(newOrder);
+    StorageService.save('salesOrders', orders);
     return newOrder;
   },
   updateSalesOrder: (id, data) => {
-    const idx = MockData.salesOrders.findIndex(o => o.id === id);
-    if (idx !== -1) { MockData.salesOrders[idx] = { ...MockData.salesOrders[idx], ...data }; return MockData.salesOrders[idx]; }
+    const orders = StorageService.load('salesOrders', MockData.salesOrders);
+    const idx = orders.findIndex(o => o.id === id);
+    if (idx !== -1) {
+      orders[idx] = { ...orders[idx], ...data };
+      StorageService.save('salesOrders', orders);
+      return orders[idx];
+    }
     return null;
   },
   deleteSalesOrder: (id) => {
-    const idx = MockData.salesOrders.findIndex(o => o.id === id);
-    if (idx !== -1) { MockData.salesOrders.splice(idx, 1); return true; }
+    const orders = StorageService.load('salesOrders', MockData.salesOrders);
+    const idx = orders.findIndex(o => o.id === id);
+    if (idx !== -1) {
+      orders.splice(idx, 1);
+      StorageService.save('salesOrders', orders);
+      return true;
+    }
     return false;
   },
+
+  // 交货单操作
   addDeliveryOrder: (order) => {
-    const newOrder = { ...order, id: 'DO' + Date.now(), status: '待发货', createTime: new Date().toISOString().slice(0, 10) };
-    MockData.deliveryOrders.unshift(newOrder);
+    const orders = StorageService.load('deliveryOrders', MockData.deliveryOrders);
+    const newOrder = {
+      ...order,
+      id: 'DO' + Date.now(),
+      status: '待发货',
+      createTime: new Date().toISOString().slice(0, 10)
+    };
+    orders.unshift(newOrder);
+    StorageService.save('deliveryOrders', orders);
+
+    // 如果有关联的销售订单,更新订单的交货单列表
+    if (order.salesOrderId) {
+      const salesOrders = StorageService.load('salesOrders', MockData.salesOrders);
+      const soIdx = salesOrders.findIndex(o => o.id === order.salesOrderId);
+      if (soIdx !== -1) {
+        if (!salesOrders[soIdx].deliveryOrders) {
+          salesOrders[soIdx].deliveryOrders = [];
+        }
+        salesOrders[soIdx].deliveryOrders.push(newOrder.id);
+        StorageService.save('salesOrders', salesOrders);
+      }
+    }
+
     return newOrder;
+  },
+  updateDeliveryOrder: (id, data) => {
+    const orders = StorageService.load('deliveryOrders', MockData.deliveryOrders);
+    const idx = orders.findIndex(o => o.id === id);
+    if (idx !== -1) {
+      orders[idx] = { ...orders[idx], ...data };
+      StorageService.save('deliveryOrders', orders);
+      return orders[idx];
+    }
+    return null;
+  },
+
+  // 主数据更新方法
+  updateUser: (id, data) => {
+    const users = StorageService.load('users', MockData.users);
+    const idx = users.findIndex(u => u.id === id);
+    if (idx !== -1) {
+      users[idx] = { ...users[idx], ...data };
+      StorageService.save('users', users);
+      return users[idx];
+    }
+    return null;
+  },
+  updateRole: (id, data) => {
+    const roles = StorageService.load('roles', MockData.roles);
+    const idx = roles.findIndex(r => r.id === id);
+    if (idx !== -1) {
+      roles[idx] = { ...roles[idx], ...data };
+      StorageService.save('roles', roles);
+      return roles[idx];
+    }
+    return null;
+  },
+  updateRule: (id, data) => {
+    const rules = StorageService.load('rules', MockData.rules);
+    const idx = rules.findIndex(r => r.id === id);
+    if (idx !== -1) {
+      rules[idx] = { ...rules[idx], ...data };
+      StorageService.save('rules', rules);
+      return rules[idx];
+    }
+    return null;
+  },
+  updateWarehouse: (id, data) => {
+    const warehouses = StorageService.load('warehouses', MockData.warehouses);
+    const idx = warehouses.findIndex(w => w.id === id);
+    if (idx !== -1) {
+      warehouses[idx] = { ...warehouses[idx], ...data };
+      StorageService.save('warehouses', warehouses);
+      return warehouses[idx];
+    }
+    return null;
+  },
+  updateProduct: (id, data) => {
+    const products = StorageService.load('products', MockData.products);
+    const idx = products.findIndex(p => p.id === id);
+    if (idx !== -1) {
+      products[idx] = { ...products[idx], ...data };
+      StorageService.save('products', products);
+      return products[idx];
+    }
+    return null;
+  },
+  updateServiceProvider: (id, data) => {
+    const providers = StorageService.load('serviceProviders', MockData.serviceProviders);
+    const idx = providers.findIndex(p => p.id === id);
+    if (idx !== -1) {
+      providers[idx] = { ...providers[idx], ...data };
+      StorageService.save('serviceProviders', providers);
+      return providers[idx];
+    }
+    return null;
+  },
+  updateCustomer: (id, data) => {
+    const customers = StorageService.load('customers', MockData.customers);
+    const idx = customers.findIndex(c => c.id === id);
+    if (idx !== -1) {
+      customers[idx] = { ...customers[idx], ...data };
+      StorageService.save('customers', customers);
+      return customers[idx];
+    }
+    return null;
+  },
+  updateOrderType: (id, data) => {
+    const orderTypes = StorageService.load('orderTypes', MockData.orderTypes);
+    const idx = orderTypes.findIndex(t => t.id === id);
+    if (idx !== -1) {
+      orderTypes[idx] = { ...orderTypes[idx], ...data };
+      StorageService.save('orderTypes', orderTypes);
+      return orderTypes[idx];
+    }
+    return null;
+  },
+  updateConsignee: (id, data) => {
+    const consignees = StorageService.load('consignees', MockData.consignees);
+    const idx = consignees.findIndex(c => c.id === id);
+    if (idx !== -1) {
+      consignees[idx] = { ...consignees[idx], ...data };
+      StorageService.save('consignees', consignees);
+      return consignees[idx];
+    }
+    return null;
   }
 };
 
 window.MockData = MockData;
 window.DataService = DataService;
+
+// 页面加载时初始化数据
+document.addEventListener('DOMContentLoaded', () => {
+  DataService.init();
+});
+

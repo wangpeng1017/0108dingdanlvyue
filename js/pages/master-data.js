@@ -46,7 +46,18 @@ Pages['user-management'] = {
     <div class="form-row"><label class="form-label required">部门</label><div class="form-content"><input type="text" class="form-control" id="edit-department" value="${user.department}" required></div></div>
     <div class="form-row"><label class="form-label required">手机号</label><div class="form-content"><input type="text" class="form-control" id="edit-phone" value="${user.phone}" required></div></div>
     <div class="form-row"><label class="form-label">邮箱</label><div class="form-content"><input type="email" class="form-control" id="edit-email" value="${user.email || ''}"></div></div>
-  </form>`, onOk: () => Message.success('用户信息已更新')
+  </form>`, onOk: () => {
+                const updatedData = {
+                    name: document.getElementById('edit-name').value,
+                    role: document.getElementById('edit-role').value,
+                    department: document.getElementById('edit-department').value,
+                    phone: document.getElementById('edit-phone').value,
+                    email: document.getElementById('edit-email').value
+                };
+                DataService.updateUser(id, updatedData);
+                Pages['user-management'].init();
+                Message.success('用户信息已更新');
+            }
         });
     },
     resetPwd(id) { Modal.confirm({ title: '重置密码', message: '确定重置该用户密码？', type: 'warning', onOk: () => Message.success('密码已重置为初始密码') }); }
@@ -92,7 +103,15 @@ Pages['role-management'] = {
     <div class="form-row"><label class="form-label required">角色名称</label><div class="form-content"><input type="text" class="form-control" id="edit-name" value="${role.name}" required></div></div>
     <div class="form-row"><label class="form-label required">角色编码</label><div class="form-content"><input type="text" class="form-control" id="edit-code" value="${role.code}" required readonly style="background:#f5f5f5"></div></div>
     <div class="form-row"><label class="form-label">描述</label><div class="form-content"><textarea class="form-control" id="edit-description" rows="2">${role.description || ''}</textarea></div></div>
-  </form>`, onOk: () => Message.success('角色信息已更新')
+  </form>`, onOk: () => {
+                const updatedData = {
+                    name: document.getElementById('edit-name').value,
+                    description: document.getElementById('edit-description').value
+                };
+                DataService.updateRole(id, updatedData);
+                Pages['role-management'].init();
+                Message.success('角色信息已更新');
+            }
         });
     },
     editPerm(id) {
@@ -148,7 +167,18 @@ Pages['rule-management'] = {
     <div class="form-row"><label class="form-label required">触发条件</label><div class="form-content"><textarea class="form-control" id="edit-condition" rows="2" required placeholder="如: 订单金额≤10000且客户等级=A">${rule.condition}</textarea></div></div>
     <div class="form-row"><label class="form-label required">执行动作</label><div class="form-content"><input type="text" class="form-control" id="edit-action" value="${rule.action}" required></div></div>
     <div class="form-row"><label class="form-label">优先级</label><div class="form-content"><input type="number" class="form-control" id="edit-priority" value="${rule.priority}"></div></div>
-  </form>`, onOk: () => Message.success('规则已更新')
+  </form>`, onOk: () => {
+                const updatedData = {
+                    name: document.getElementById('edit-name').value,
+                    type: document.getElementById('edit-type').value,
+                    condition: document.getElementById('edit-condition').value,
+                    action: document.getElementById('edit-action').value,
+                    priority: parseInt(document.getElementById('edit-priority').value)
+                };
+                DataService.updateRule(id, updatedData);
+                Pages['rule-management'].init();
+                Message.success('规则已更新');
+            }
         });
     },
     toggle(id) { Message.success('规则状态已切换'); }
@@ -201,7 +231,18 @@ Pages['warehouse-master'] = {
     <div class="form-row"><label class="form-label">地址</label><div class="form-content"><input type="text" class="form-control" id="edit-address" value="${warehouse.address}"></div></div>
     <div class="form-row"><label class="form-label">负责人</label><div class="form-content"><input type="text" class="form-control" id="edit-manager" value="${warehouse.manager}"></div></div>
     <div class="form-row"><label class="form-label">容量</label><div class="form-content"><input type="number" class="form-control" id="edit-capacity" value="${warehouse.capacity}"></div></div>
-  </form>`, onOk: () => Message.success('仓库信息已更新')
+  </form>`, onOk: () => {
+                const updatedData = {
+                    name: document.getElementById('edit-name').value,
+                    type: document.getElementById('edit-type').value,
+                    address: document.getElementById('edit-address').value,
+                    manager: document.getElementById('edit-manager').value,
+                    capacity: parseInt(document.getElementById('edit-capacity').value)
+                };
+                DataService.updateWarehouse(id, updatedData);
+                Pages['warehouse-master'].init();
+                Message.success('仓库信息已更新');
+            }
         });
     }
 };
@@ -255,7 +296,19 @@ Pages['product-master'] = {
     <div class="form-row"><label class="form-label">单位</label><div class="form-content"><input type="text" class="form-control" id="edit-unit" value="${product.unit}"></div></div>
     <div class="form-row"><label class="form-label">单价</label><div class="form-content"><input type="number" class="form-control" id="edit-price" value="${product.price}"></div></div>
     <div class="form-row"><label class="form-label">安全库存</label><div class="form-content"><input type="number" class="form-control" id="edit-safetyStock" value="${product.safetyStock}"></div></div>
-  </form>`, onOk: () => Message.success('货品信息已更新')
+  </form>`, onOk: () => {
+                const updatedData = {
+                    name: document.getElementById('edit-name').value,
+                    category: document.getElementById('edit-category').value,
+                    spec: document.getElementById('edit-spec').value,
+                    unit: document.getElementById('edit-unit').value,
+                    price: parseFloat(document.getElementById('edit-price').value),
+                    safetyStock: parseInt(document.getElementById('edit-safetyStock').value)
+                };
+                DataService.updateProduct(id, updatedData);
+                Pages['product-master'].init();
+                Message.success('货品信息已更新');
+            }
         });
     },
     import() { Message.info('请选择Excel文件导入...'); }
@@ -310,7 +363,18 @@ Pages['service-provider'] = {
     <div class="form-row"><label class="form-label">类别</label><div class="form-content"><input type="text" class="form-control" id="edit-category" value="${provider.category}"></div></div>
     <div class="form-row"><label class="form-label required">联系人</label><div class="form-content"><input type="text" class="form-control" id="edit-contact" value="${provider.contact}" required></div></div>
     <div class="form-row"><label class="form-label required">电话</label><div class="form-content"><input type="text" class="form-control" id="edit-phone" value="${provider.phone}" required></div></div>
-  </form>`, onOk: () => Message.success('服务商信息已更新')
+  </form>`, onOk: () => {
+                const updatedData = {
+                    type: document.getElementById('edit-type').value,
+                    name: document.getElementById('edit-name').value,
+                    category: document.getElementById('edit-category').value,
+                    contact: document.getElementById('edit-contact').value,
+                    phone: document.getElementById('edit-phone').value
+                };
+                DataService.updateServiceProvider(id, updatedData);
+                Pages['service-provider'].renderTable();
+                Message.success('服务商信息已更新');
+            }
         });
     }
 };
@@ -363,7 +427,19 @@ Pages['customer-master'] = {
     <div class="form-row"><label class="form-label">联系人</label><div class="form-content"><input type="text" class="form-control" id="edit-contact" value="${customer.contact}"></div></div>
     <div class="form-row"><label class="form-label">电话</label><div class="form-content"><input type="text" class="form-control" id="edit-phone" value="${customer.phone}"></div></div>
     <div class="form-row"><label class="form-label">地址</label><div class="form-content"><textarea class="form-control" id="edit-address" rows="2">${customer.address || ''}</textarea></div></div>
-  </form>`, onOk: () => Message.success('客户信息已更新')
+  </form>`, onOk: () => {
+                const updatedData = {
+                    name: document.getElementById('edit-name').value,
+                    type: document.getElementById('edit-type').value,
+                    level: document.getElementById('edit-level').value,
+                    contact: document.getElementById('edit-contact').value,
+                    phone: document.getElementById('edit-phone').value,
+                    address: document.getElementById('edit-address').value
+                };
+                DataService.updateCustomer(id, updatedData);
+                Pages['customer-master'].init();
+                Message.success('客户信息已更新');
+            }
         });
     },
     contacts(id) { Modal.create({ title: '联系人管理', size: 'lg', content: `<table class="data-table"><thead><tr><th>姓名</th><th>电话</th><th>邮箱</th><th>职务</th><th>操作</th></tr></thead><tbody><tr><td>陈经理</td><td>13900139001</td><td>chen@example.com</td><td>采购总监</td><td><button class="btn btn-link">编辑</button></td></tr></tbody></table><button class="btn btn-dashed" style="width:100%;margin-top:16px">+ 添加联系人</button>`, showFooter: false }); }
@@ -432,7 +508,17 @@ Pages['order-type'] = {
     <div class="form-row"><label class="form-label">描述</label><div class="form-content"><textarea class="form-control" id="edit-description" rows="2">${orderType.description || ''}</textarea></div></div>
     <div class="form-row"><label class="form-label">审核规则</label><div class="form-content"><input type="text" class="form-control" id="edit-auditRule" value="${orderType.auditRule}"></div></div>
     <div class="form-row"><label class="form-label">拆分规则</label><div class="form-content"><input type="text" class="form-control" id="edit-splitRule" value="${orderType.splitRule}"></div></div>
-  </form>`, onOk: () => Message.success('订单类型已更新')
+  </form>`, onOk: () => {
+                const updatedData = {
+                    name: document.getElementById('edit-name').value,
+                    description: document.getElementById('edit-description').value,
+                    auditRule: document.getElementById('edit-auditRule').value,
+                    splitRule: document.getElementById('edit-splitRule').value
+                };
+                DataService.updateOrderType(id, updatedData);
+                Pages['order-type'].init();
+                Message.success('订单类型已更新');
+            }
         });
     }
 };
@@ -481,7 +567,18 @@ Pages['consignee'] = {
     <div class="form-row"><label class="form-label required">联系电话</label><div class="form-content"><input type="text" class="form-control" id="edit-phone" value="${consignee.phone}" required></div></div>
     <div class="form-row"><label class="form-label required">收货地址</label><div class="form-content"><textarea class="form-control" id="edit-address" rows="2" required>${consignee.address}</textarea></div></div>
     <div class="form-row"><label class="form-label">设为默认</label><div class="form-content"><label class="checkbox-item"><input type="checkbox" id="edit-isDefault" ${consignee.isDefault ? 'checked' : ''}><span class="checkbox-box"></span>默认收货人</label></div></div>
-  </form>`, onOk: () => Message.success('收货人信息已更新')
+  </form>`, onOk: () => {
+                const updatedData = {
+                    customer: document.getElementById('edit-customer').value,
+                    name: document.getElementById('edit-name').value,
+                    phone: document.getElementById('edit-phone').value,
+                    address: document.getElementById('edit-address').value,
+                    isDefault: document.getElementById('edit-isDefault').checked
+                };
+                DataService.updateConsignee(id, updatedData);
+                Pages['consignee'].init();
+                Message.success('收货人信息已更新');
+            }
         });
     }
 };
