@@ -280,6 +280,7 @@
     border-top: 1px solid var(--border-light);
     min-height: 48px;
     overflow-x: auto;
+    gap: 4px;
 }
 
 .header-tabs::-webkit-scrollbar {
@@ -293,7 +294,7 @@
 
 .tab-item {
     position: relative;
-    padding: 12px 20px;
+    padding: 10px 24px;
     font-size: 14px;
     color: var(--text-secondary);
     cursor: pointer;
@@ -301,10 +302,12 @@
     transition: all 0.3s;
     border-bottom: 2px solid transparent;
     margin-bottom: -1px;
+    border-radius: 4px 4px 0 0;
 }
 
 .tab-item:hover {
     color: var(--primary-color);
+    background: rgba(64, 158, 255, 0.05);
 }
 
 .tab-item.active {
