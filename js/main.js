@@ -164,11 +164,40 @@ const App = {
             const icon = pageIcons[page] || '📄';
             const isActive = page === activePage ? 'active' : '';
 
-            return `<div class="tab-item ${isActive}" data-page="${page}" onclick="App.loadPage('${page}')">${icon && `<span class="tab-icon">${icon}</span>`}${text}</div>`;
+            return `<div class="tab-item ${isActive}" data-page="${page}" onclick="App.loadPage('${page}')">${icon && `<span class="tab-icon">${icon}</span>`}${text}<span class="tab-close" onclick="event.stopPropagation();App.closeTab('${parentKey}', '${page}')">×</span></div>`;
         }).filter(t => t).join('');
 
         headerTabs.innerHTML = tabs;
         headerTabs.style.display = 'flex';
+    },
+
+    closeTab(parentKey, page) {
+        // 从历史记录中移除该标签
+        if (this.tabHistory[parentKey]) {
+            const index = this.tabHistory[parentKey].indexOf(page);
+            if (index > -1) {
+                this.tabHistory[parentKey].splice(index, 1);
+            }
+
+            // 如果关闭的是当前激活的标签,切换到最后一个标签
+            if (this.currentPage === page && this.tabHistory[parentKey].length > 0) {
+                const lastPage = this.tabHistory[parentKey][this.tabHistory[parentKey].length - 1];
+                this.loadPage(lastPage);
+            } else if (this.tabHistory[parentKey].length === 0) {
+                // 如果没有标签了,隐藏标签栏
+                const headerTabs = document.getElementById('header-tabs');
+                if (headerTabs) {
+                    headerTabs.style.display = 'none';
+                }
+            } else {
+                // 重新渲染标签
+                const activeNav = document.querySelector('.nav-link.active');
+                const submenu = activeNav?.closest('.nav-item')?.querySelector('.nav-submenu');
+                if (submenu) {
+                    this.updateHeaderTabs(submenu, this.currentPage);
+                }
+            }
+        }
     },
 
     updateBreadcrumb(page) {

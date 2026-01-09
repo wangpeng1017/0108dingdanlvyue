@@ -275,12 +275,12 @@
 .header-tabs {
     display: flex;
     align-items: center;
-    padding: 6px 24px;
+    padding: 4px 24px;
     background: #f5f7fa;
     border-top: 1px solid var(--border-light);
-    min-height: 48px;
+    min-height: 42px;
     overflow-x: auto;
-    gap: 8px;
+    gap: 6px;
 }
 
 .header-tabs::-webkit-scrollbar {
@@ -294,7 +294,7 @@
 
 .tab-item {
     position: relative;
-    padding: 6px 14px;
+    padding: 4px 24px 4px 12px;
     font-size: 13px;
     color: var(--text-primary);
     cursor: pointer;
@@ -327,6 +327,39 @@
 
 .tab-item .tab-icon {
     font-size: 14px;
+}
+
+.tab-item .tab-close {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    opacity: 0.6;
+    transition: all 0.2s;
+    line-height: 1;
+}
+
+.tab-item:hover .tab-close {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.tab-item.active .tab-close {
+    color: #ffffff;
+}
+
+.tab-item.active:hover .tab-close {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.tab-close:hover {
+    background: rgba(0, 0, 0, 0.15) !important;
 }
 
 .header-right {
