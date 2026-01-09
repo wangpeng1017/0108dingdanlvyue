@@ -260,13 +260,16 @@ Pages['delivery-list'] = {
 
         Loading.show();
         setTimeout(() => {
-          const idx = this.data.findIndex(d => d.id === id);
-          if (idx !== -1) {
-            this.data[idx].status = '运输中';
-            this.data[idx].carrier = document.getElementById('ship-carrier').value;
-            this.data[idx].trackingNo = tracking;
-            this.data[idx].shipTime = document.getElementById('ship-time').value.replace('T', ' ');
-          }
+          // 使用 DataService 更新数据并持久化
+          DataService.updateDeliveryOrder(id, {
+            status: '运输中',
+            carrier: document.getElementById('ship-carrier').value,
+            trackingNo: tracking,
+            shipTime: document.getElementById('ship-time').value.replace('T', ' ')
+          });
+
+          // 刷新本地数据
+          this.data = DataService.getDeliveryOrders();
           this.filteredData = [...this.data];
           this.renderTable();
           Loading.hide();
@@ -306,8 +309,11 @@ Pages['delivery-list'] = {
       onOk: () => {
         Loading.show();
         setTimeout(() => {
-          const idx = this.data.findIndex(d => d.id === id);
-          if (idx !== -1) this.data[idx].status = '已签收';
+          // 使用 DataService 更新数据并持久化
+          DataService.updateDeliveryOrder(id, { status: '已签收' });
+
+          // 刷新本地数据
+          this.data = DataService.getDeliveryOrders();
           this.filteredData = [...this.data];
           this.renderTable();
           Loading.hide();
@@ -344,14 +350,17 @@ Pages['delivery-list'] = {
         Loading.show();
         setTimeout(() => {
           pending.forEach(id => {
-            const idx = this.data.findIndex(d => d.id === id);
-            if (idx !== -1) {
-              this.data[idx].status = '运输中';
-              this.data[idx].carrier = '顺丰速运';
-              this.data[idx].trackingNo = 'SF' + Date.now() + Math.floor(Math.random() * 1000);
-              this.data[idx].shipTime = new Date().toLocaleString();
-            }
+            // 使用 DataService 更新数据并持久化
+            DataService.updateDeliveryOrder(id, {
+              status: '运输中',
+              carrier: '顺丰速运',
+              trackingNo: 'SF' + Date.now() + Math.floor(Math.random() * 1000),
+              shipTime: new Date().toLocaleString()
+            });
           });
+
+          // 刷新本地数据
+          this.data = DataService.getDeliveryOrders();
           this.filteredData = [...this.data];
           this.renderTable();
           Loading.hide();

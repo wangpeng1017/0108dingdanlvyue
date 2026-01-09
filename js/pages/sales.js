@@ -278,6 +278,26 @@ Pages['order-list'] = {
           <tbody>${o.products.map(p => `<tr><td>${p.code}</td><td>${p.name}</td><td>${p.qty}</td><td>${Format.currency(p.price)}</td><td>${Format.currency(p.qty * p.price)}</td></tr>`).join('')}</tbody>
           <tfoot><tr><td colspan="4" style="text-align:right;font-weight:500">合计</td><td style="font-weight:600">${Format.currency(o.totalAmount)}</td></tr></tfoot>
         </table>
+        ${o.deliveryOrders && o.deliveryOrders.length > 0 ? `
+          <h4 style="margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border-light)">关联交货单 (${o.deliveryOrders.length})</h4>
+          <table class="data-table">
+            <thead><tr><th>交货单号</th><th>创建时间</th><th>状态</th><th>操作</th></tr></thead>
+            <tbody>${o.deliveryOrders.map(doId => {
+        const deliveryOrder = DataService.getDeliveryOrders().find(d => d.id === doId);
+        if (!deliveryOrder) return '';
+        return `<tr>
+                <td>${deliveryOrder.id}</td>
+                <td>${deliveryOrder.createTime}</td>
+                <td>${Format.status(deliveryOrder.status, {
+          '待发货': { text: '待发货', type: 'warning' },
+          '运输中': { text: '运输中', type: 'info' },
+          '已签收': { text: '已签收', type: 'success' }
+        })}</td>
+                <td><button class="btn btn-link" onclick="Modal.closeAll();setTimeout(() => App.loadPage('delivery-list'), 100)">查看</button></td>
+              </tr>`;
+      }).join('')}</tbody>
+          </table>
+        ` : ''}
         <div style="display:flex;gap:8px;margin-top:24px;justify-content:center">
           ${o.status === '待审核' ? `<button class="btn btn-primary" onclick="Modal.closeAll();Pages['order-list'].audit('${o.id}')">审核通过</button>` : ''}
           <button class="btn btn-default" onclick="Message.success('已复制订单信息')">复制</button>
