@@ -140,16 +140,18 @@ const App = {
             'report-query': '🔍'
         };
 
-        // 生成标签页
-        const tabs = Array.from(subLinks).map(link => {
-            const page = link.dataset.page;
-            const text = link.textContent.trim();
-            const icon = pageIcons[page] || '📄';
-            const isActive = page === activePage ? 'active' : '';
-            return `<div class="tab-item ${isActive}" data-page="${page}" onclick="App.loadPage('${page}')"><span class="tab-icon">${icon}</span>${text}</div>`;
-        }).join('');
+        // 只显示当前激活的标签
+        const activeLink = Array.from(subLinks).find(link => link.dataset.page === activePage);
+        if (!activeLink) {
+            headerTabs.style.display = 'none';
+            return;
+        }
 
-        headerTabs.innerHTML = tabs;
+        const page = activeLink.dataset.page;
+        const text = activeLink.textContent.trim();
+        const icon = pageIcons[page] || '📄';
+
+        headerTabs.innerHTML = `<div class="tab-item active" data-page="${page}">${icon && `<span class="tab-icon">${icon}</span>`}${text}</div>`;
         headerTabs.style.display = 'flex';
     },
 
