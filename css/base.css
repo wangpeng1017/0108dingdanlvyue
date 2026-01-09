@@ -1,9 +1,9 @@
 :root {
   /* 主色调 - 青色系 */
-  --primary-color: #13c2c2;
-  --primary-hover: #36cfc9;
-  --primary-active: #08979c;
-  --primary-light: #e6fffb;
+  --primary-color: #0099A0;
+  --primary-hover: #00B3BB;
+  --primary-active: #007F85;
+  --primary-light: #e6f7f8;
 
   /* 功能色 */
   --success-color: #52c41a;
