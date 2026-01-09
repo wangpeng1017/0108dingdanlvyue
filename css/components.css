@@ -1104,3 +1104,323 @@ textarea.form-control {
 .todo-card:active {
     transform: translateY(0);
 }
+
+/* ========================================
+   Dashboard Tabs
+======================================== */
+.dashboard-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    background: var(--background-light);
+    padding: 4px;
+    border-radius: var(--radius-md);
+}
+
+.dashboard-tabs .tab-item {
+    flex: 1;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: transparent;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dashboard-tabs .tab-item:hover {
+    color: var(--primary-color);
+}
+
+.dashboard-tabs .tab-item.active {
+    background: var(--white);
+    color: var(--primary-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* ========================================
+   Tab Content
+======================================== */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* ========================================
+   Dashboard Stat Cards
+======================================== */
+.dashboard-stat-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.dashboard-stat-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border: 1px solid var(--border-light);
+    transition: all 0.3s ease;
+}
+
+.dashboard-stat-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+.stat-circle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.stat-circle.primary {
+    background: linear-gradient(135deg, #e6fffb 0%, #b5f5ec 100%);
+    color: var(--primary-color);
+}
+
+.stat-circle.info {
+    background: linear-gradient(135deg, #e6f7ff 0%, #bae7ff 100%);
+    color: var(--info-color);
+}
+
+.stat-circle.error {
+    background: linear-gradient(135deg, #fff2f0 0%, #ffccc7 100%);
+    color: var(--error-color);
+}
+
+.stat-circle.warning {
+    background: linear-gradient(135deg, #fffbe6 0%, #fff1b8 100%);
+    color: var(--warning-color);
+}
+
+.stat-circle.pink {
+    background: linear-gradient(135deg, #fff0f6 0%, #ffd6e7 100%);
+    color: #eb2f96;
+}
+
+.stat-circle.blue {
+    background: linear-gradient(135deg, #f0f5ff 0%, #d6e4ff 100%);
+    color: #2f54eb;
+}
+
+.stat-icon {
+    width: 28px;
+    height: 28px;
+}
+
+.stat-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.stat-title {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+
+.stat-numbers {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.stat-current {
+    color: var(--text-primary);
+}
+
+.stat-divider {
+    color: var(--text-disabled);
+    font-size: 16px;
+}
+
+.stat-total {
+    color: var(--text-secondary);
+    font-size: 16px;
+}
+
+.stat-subtitle {
+    font-size: 11px;
+    color: var(--text-disabled);
+}
+
+/* ========================================
+   Dashboard Visualization Grid
+======================================== */
+.dashboard-viz-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+}
+
+.viz-content {
+    padding: 20px;
+}
+
+/* Donut Chart */
+.donut-chart {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.donut-ring {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.donut-hole {
+    position: absolute;
+    inset: 30px;
+    background: var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.donut-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.donut-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.legend-label {
+    flex: 1;
+}
+
+/* Gauge Chart */
+.gauge-chart-group {
+    display: flex;
+    justify-content: space-around;
+    gap: 16px;
+}
+
+.gauge-chart {
+    text-align: center;
+}
+
+.gauge-value {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.gauge-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.gauge-ring {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: conic-gradient(var(--primary-color) 0deg,
+            var(--primary-color) calc(var(--progress) * 3.6deg),
+            var(--border-light) calc(var(--progress) * 3.6deg),
+            var(--border-light) 360deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+}
+
+.gauge-inner {
+    width: 70px;
+    height: 70px;
+    background: var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gauge-percent {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Bar Chart */
+.bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.bar-item {
+    display: grid;
+    grid-template-columns: 60px 1fr 40px;
+    align-items: center;
+    gap: 12px;
+}
+
+.bar-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-align: right;
+}
+
+.bar-track {
+    height: 8px;
+    background: var(--border-light);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--info-color));
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.bar-value {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-primary);
+    text-align: right;
+}
