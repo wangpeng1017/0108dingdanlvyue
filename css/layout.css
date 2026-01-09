@@ -294,8 +294,9 @@
 
 .tab-item {
     position: relative;
-    padding: 4px 24px 4px 12px;
-    font-size: 13px;
+    padding: 0 28px 0 12px;
+    height: 32px;
+    font-size: 14px;
     color: var(--text-primary);
     cursor: pointer;
     white-space: nowrap;
