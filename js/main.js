@@ -84,9 +84,40 @@ const App = {
             const parent = activeLink.closest('.nav-submenu');
             if (parent) {
                 parent.classList.add('expanded');
-                parent.previousElementSibling?.querySelector('.nav-arrow')?.classList.add('expanded');
+                const parentNav = parent.previousElementSibling;
+                parentNav?.querySelector('.nav-arrow')?.classList.add('expanded');
+                parentNav?.classList.add('active');
+
+                // 更新顶部标签页
+                this.updateHeaderTabs(parent, page);
+            } else {
+                // 隐藏标签页(一级菜单)
+                document.getElementById('header-tabs').style.display = 'none';
             }
         }
+    },
+
+    updateHeaderTabs(submenu, activePage) {
+        const headerTabs = document.getElementById('header-tabs');
+        if (!headerTabs || !submenu) return;
+
+        // 获取所有子菜单项
+        const subLinks = submenu.querySelectorAll('.nav-link[data-page]');
+        if (subLinks.length === 0) {
+            headerTabs.style.display = 'none';
+            return;
+        }
+
+        // 生成标签页
+        const tabs = Array.from(subLinks).map(link => {
+            const page = link.dataset.page;
+            const text = link.textContent.trim();
+            const isActive = page === activePage ? 'active' : '';
+            return `<div class="tab-item ${isActive}" data-page="${page}" onclick="App.loadPage('${page}')">${text}</div>`;
+        }).join('');
+
+        headerTabs.innerHTML = tabs;
+        headerTabs.style.display = 'flex';
     },
 
     updateBreadcrumb(page) {

@@ -123,29 +123,26 @@
 
     <!-- 右侧主内容区 -->
     <main class="main-container">
+      <!-- 顶部导航栏 -->
       <header class="main-header">
-        <div class="header-left">
-          <div class="toggle-sidebar" title="折叠菜单">☰</div>
-          <div class="breadcrumb" id="breadcrumb">
-            <span class="breadcrumb-item">首页</span>
+        <div class="header-top">
+          <div class="header-left">
+            <div class="toggle-sidebar" onclick="App.toggleSidebar()" title="折叠菜单">☰</div>
+            <div class="breadcrumb" id="breadcrumb">
+              <span class="breadcrumb-item">首页</span>
+            </div>
           </div>
-        </div>
-        <div class="header-right">
-          <div class="header-action" title="消息">🔔<span class="badge">3</span></div>
-          <div class="dropdown">
+          <div class="header-right">
+            <div class="header-action" title="消息">🔔<span class="badge">3</span></div>
             <div class="user-dropdown">
               <div class="avatar">张</div>
               <span class="name">张明</span>
             </div>
-            <div class="dropdown-menu">
-              <div class="dropdown-item" onclick="Message.info('个人设置')">👤 个人设置</div>
-              <div class="dropdown-item" onclick="Message.info('修改密码')">🔐 修改密码</div>
-              <div class="dropdown-divider"></div>
-              <div class="dropdown-item danger"
-                onclick="Modal.confirm({title:'退出确认',message:'确定要退出登录吗？',onOk:()=>Message.success('已退出登录')})">🚪 退出登录
-              </div>
-            </div>
           </div>
+        </div>
+        <!-- 二级菜单标签页 -->
+        <div class="header-tabs" id="header-tabs" style="display:none;">
+          <!-- 动态生成的标签页 -->
         </div>
       </header>
 
