@@ -35,7 +35,20 @@ Pages['user-management'] = {
   </form>`, onOk: () => Message.success('用户创建成功')
         });
     },
-    edit(id) { Modal.create({ title: '编辑用户', content: '<p>编辑用户信息...</p>', onOk: () => Message.success('保存成功') }); },
+    edit(id) {
+        const user = DataService.getUsers().find(u => u.id === id);
+        if (!user) return;
+        Modal.create({
+            title: '编辑用户', size: 'lg', content: `<form class="modal-form">
+    <div class="form-row"><label class="form-label required">用户名</label><div class="form-content"><input type="text" class="form-control" id="edit-username" value="${user.username}" required readonly style="background:#f5f5f5"></div></div>
+    <div class="form-row"><label class="form-label required">姓名</label><div class="form-content"><input type="text" class="form-control" id="edit-name" value="${user.name}" required></div></div>
+    <div class="form-row"><label class="form-label required">角色</label><div class="form-content"><select class="form-control form-select" id="edit-role">${DataService.getRoles().map(r => `<option ${r.name === user.role ? 'selected' : ''}>${r.name}</option>`).join('')}</select></div></div>
+    <div class="form-row"><label class="form-label required">部门</label><div class="form-content"><input type="text" class="form-control" id="edit-department" value="${user.department}" required></div></div>
+    <div class="form-row"><label class="form-label required">手机号</label><div class="form-content"><input type="text" class="form-control" id="edit-phone" value="${user.phone}" required></div></div>
+    <div class="form-row"><label class="form-label">邮箱</label><div class="form-content"><input type="email" class="form-control" id="edit-email" value="${user.email || ''}"></div></div>
+  </form>`, onOk: () => Message.success('用户信息已更新')
+        });
+    },
     resetPwd(id) { Modal.confirm({ title: '重置密码', message: '确定重置该用户密码？', type: 'warning', onOk: () => Message.success('密码已重置为初始密码') }); }
 };
 
@@ -71,7 +84,17 @@ Pages['role-management'] = {
   </form>`, onOk: () => Message.success('角色创建成功')
         });
     },
-    edit(id) { Modal.create({ title: '编辑角色', content: '<p>编辑角色信息...</p>', onOk: () => Message.success('保存成功') }); },
+    edit(id) {
+        const role = DataService.getRoles().find(r => r.id === id);
+        if (!role) return;
+        Modal.create({
+            title: '编辑角色', content: `<form class="modal-form">
+    <div class="form-row"><label class="form-label required">角色名称</label><div class="form-content"><input type="text" class="form-control" id="edit-name" value="${role.name}" required></div></div>
+    <div class="form-row"><label class="form-label required">角色编码</label><div class="form-content"><input type="text" class="form-control" id="edit-code" value="${role.code}" required readonly style="background:#f5f5f5"></div></div>
+    <div class="form-row"><label class="form-label">描述</label><div class="form-content"><textarea class="form-control" id="edit-description" rows="2">${role.description || ''}</textarea></div></div>
+  </form>`, onOk: () => Message.success('角色信息已更新')
+        });
+    },
     editPerm(id) {
         Modal.create({
             title: '权限配置', size: 'lg', content: `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
@@ -115,7 +138,19 @@ Pages['rule-management'] = {
   </form>`, onOk: () => Message.success('规则创建成功')
         });
     },
-    edit(id) { Modal.create({ title: '编辑规则', content: '<p>编辑规则...</p>', onOk: () => Message.success('保存成功') }); },
+    edit(id) {
+        const rule = DataService.getRules().find(r => r.id === id);
+        if (!rule) return;
+        Modal.create({
+            title: '编辑规则', size: 'lg', content: `<form class="modal-form">
+    <div class="form-row"><label class="form-label required">规则名称</label><div class="form-content"><input type="text" class="form-control" id="edit-name" value="${rule.name}" required></div></div>
+    <div class="form-row"><label class="form-label required">规则类型</label><div class="form-content"><select class="form-control form-select" id="edit-type"><option ${rule.type === '业务规则' ? 'selected' : ''}>业务规则</option><option ${rule.type === '预警规则' ? 'selected' : ''}>预警规则</option></select></div></div>
+    <div class="form-row"><label class="form-label required">触发条件</label><div class="form-content"><textarea class="form-control" id="edit-condition" rows="2" required placeholder="如: 订单金额≤10000且客户等级=A">${rule.condition}</textarea></div></div>
+    <div class="form-row"><label class="form-label required">执行动作</label><div class="form-content"><input type="text" class="form-control" id="edit-action" value="${rule.action}" required></div></div>
+    <div class="form-row"><label class="form-label">优先级</label><div class="form-content"><input type="number" class="form-control" id="edit-priority" value="${rule.priority}"></div></div>
+  </form>`, onOk: () => Message.success('规则已更新')
+        });
+    },
     toggle(id) { Message.success('规则状态已切换'); }
 };
 
@@ -155,7 +190,20 @@ Pages['warehouse-master'] = {
   </form>`, onOk: () => Message.success('仓库创建成功')
         });
     },
-    edit(id) { Modal.create({ title: '编辑仓库', content: '<p>编辑仓库...</p>', onOk: () => Message.success('保存成功') }); }
+    edit(id) {
+        const warehouse = DataService.getWarehouses().find(w => w.id === id);
+        if (!warehouse) return;
+        Modal.create({
+            title: '编辑仓库', content: `<form class="modal-form">
+    <div class="form-row"><label class="form-label required">仓库编码</label><div class="form-content"><input type="text" class="form-control" id="edit-code" value="${warehouse.code}" required readonly style="background:#f5f5f5"></div></div>
+    <div class="form-row"><label class="form-label required">仓库名称</label><div class="form-content"><input type="text" class="form-control" id="edit-name" value="${warehouse.name}" required></div></div>
+    <div class="form-row"><label class="form-label required">类型</label><div class="form-content"><select class="form-control form-select" id="edit-type"><option ${warehouse.type === '成品仓' ? 'selected' : ''}>成品仓</option><option ${warehouse.type === '原材料仓' ? 'selected' : ''}>原材料仓</option><option ${warehouse.type === '半成品仓' ? 'selected' : ''}>半成品仓</option></select></div></div>
+    <div class="form-row"><label class="form-label">地址</label><div class="form-content"><input type="text" class="form-control" id="edit-address" value="${warehouse.address}"></div></div>
+    <div class="form-row"><label class="form-label">负责人</label><div class="form-content"><input type="text" class="form-control" id="edit-manager" value="${warehouse.manager}"></div></div>
+    <div class="form-row"><label class="form-label">容量</label><div class="form-content"><input type="number" class="form-control" id="edit-capacity" value="${warehouse.capacity}"></div></div>
+  </form>`, onOk: () => Message.success('仓库信息已更新')
+        });
+    }
 };
 
 // 货品管理
@@ -195,7 +243,21 @@ Pages['product-master'] = {
   </form>`, onOk: () => Message.success('货品创建成功')
         });
     },
-    edit(id) { Modal.create({ title: '编辑货品', content: '<p>编辑货品...</p>', onOk: () => Message.success('保存成功') }); },
+    edit(id) {
+        const product = DataService.getProducts().find(p => p.id === id);
+        if (!product) return;
+        Modal.create({
+            title: '编辑货品', size: 'lg', content: `<form class="modal-form">
+    <div class="form-row"><label class="form-label required">货品编码</label><div class="form-content"><input type="text" class="form-control" id="edit-code" value="${product.code}" required readonly style="background:#f5f5f5"></div></div>
+    <div class="form-row"><label class="form-label required">货品名称</label><div class="form-content"><input type="text" class="form-control" id="edit-name" value="${product.name}" required></div></div>
+    <div class="form-row"><label class="form-label required">分类</label><div class="form-content"><select class="form-control form-select" id="edit-category"><option ${product.category === '逆变器' ? 'selected' : ''}>逆变器</option><option ${product.category === '配件' ? 'selected' : ''}>配件</option><option ${product.category === '包装材料' ? 'selected' : ''}>包装材料</option></select></div></div>
+    <div class="form-row"><label class="form-label">规格</label><div class="form-content"><input type="text" class="form-control" id="edit-spec" value="${product.spec || ''}"></div></div>
+    <div class="form-row"><label class="form-label">单位</label><div class="form-content"><input type="text" class="form-control" id="edit-unit" value="${product.unit}"></div></div>
+    <div class="form-row"><label class="form-label">单价</label><div class="form-content"><input type="number" class="form-control" id="edit-price" value="${product.price}"></div></div>
+    <div class="form-row"><label class="form-label">安全库存</label><div class="form-content"><input type="number" class="form-control" id="edit-safetyStock" value="${product.safetyStock}"></div></div>
+  </form>`, onOk: () => Message.success('货品信息已更新')
+        });
+    },
     import() { Message.info('请选择Excel文件导入...'); }
 };
 
@@ -238,7 +300,19 @@ Pages['service-provider'] = {
   </form>`, onOk: () => Message.success('服务商创建成功')
         });
     },
-    edit(id) { Modal.create({ title: '编辑服务商', content: '<p>编辑...</p>', onOk: () => Message.success('保存成功') }); }
+    edit(id) {
+        const provider = DataService.getServiceProviders().find(p => p.id === id);
+        if (!provider) return;
+        Modal.create({
+            title: '编辑服务商', content: `<form class="modal-form">
+    <div class="form-row"><label class="form-label required">类型</label><div class="form-content"><select class="form-control form-select" id="edit-type"><option ${provider.type === '供应商' ? 'selected' : ''}>供应商</option><option ${provider.type === '承运商' ? 'selected' : ''}>承运商</option></select></div></div>
+    <div class="form-row"><label class="form-label required">名称</label><div class="form-content"><input type="text" class="form-control" id="edit-name" value="${provider.name}" required></div></div>
+    <div class="form-row"><label class="form-label">类别</label><div class="form-content"><input type="text" class="form-control" id="edit-category" value="${provider.category}"></div></div>
+    <div class="form-row"><label class="form-label required">联系人</label><div class="form-content"><input type="text" class="form-control" id="edit-contact" value="${provider.contact}" required></div></div>
+    <div class="form-row"><label class="form-label required">电话</label><div class="form-content"><input type="text" class="form-control" id="edit-phone" value="${provider.phone}" required></div></div>
+  </form>`, onOk: () => Message.success('服务商信息已更新')
+        });
+    }
 };
 
 // 客户管理
@@ -277,7 +351,21 @@ Pages['customer-master'] = {
   </form>`, onOk: () => Message.success('客户创建成功')
         });
     },
-    edit(id) { Modal.create({ title: '编辑客户', content: '<p>编辑...</p>', onOk: () => Message.success('保存成功') }); },
+    edit(id) {
+        const customer = DataService.getCustomers().find(c => c.id === id);
+        if (!customer) return;
+        Modal.create({
+            title: '编辑客户', size: 'lg', content: `<form class="modal-form">
+    <div class="form-row"><label class="form-label required">客户编码</label><div class="form-content"><input type="text" class="form-control" id="edit-code" value="${customer.code}" required readonly style="background:#f5f5f5"></div></div>
+    <div class="form-row"><label class="form-label required">客户名称</label><div class="form-content"><input type="text" class="form-control" id="edit-name" value="${customer.name}" required></div></div>
+    <div class="form-row"><label class="form-label required">类型</label><div class="form-content"><select class="form-control form-select" id="edit-type"><option ${customer.type === '内部客户' ? 'selected' : ''}>内部客户</option><option ${customer.type === 'ODM客户' ? 'selected' : ''}>ODM客户</option><option ${customer.type === '代理商' ? 'selected' : ''}>代理商</option><option ${customer.type === '终端客户' ? 'selected' : ''}>终端客户</option></select></div></div>
+    <div class="form-row"><label class="form-label">等级</label><div class="form-content"><select class="form-control form-select" id="edit-level"><option ${customer.level === 'A' ? 'selected' : ''}>A</option><option ${customer.level === 'B' ? 'selected' : ''}>B</option><option ${customer.level === 'C' ? 'selected' : ''}>C</option></select></div></div>
+    <div class="form-row"><label class="form-label">联系人</label><div class="form-content"><input type="text" class="form-control" id="edit-contact" value="${customer.contact}"></div></div>
+    <div class="form-row"><label class="form-label">电话</label><div class="form-content"><input type="text" class="form-control" id="edit-phone" value="${customer.phone}"></div></div>
+    <div class="form-row"><label class="form-label">地址</label><div class="form-content"><textarea class="form-control" id="edit-address" rows="2">${customer.address || ''}</textarea></div></div>
+  </form>`, onOk: () => Message.success('客户信息已更新')
+        });
+    },
     contacts(id) { Modal.create({ title: '联系人管理', size: 'lg', content: `<table class="data-table"><thead><tr><th>姓名</th><th>电话</th><th>邮箱</th><th>职务</th><th>操作</th></tr></thead><tbody><tr><td>陈经理</td><td>13900139001</td><td>chen@example.com</td><td>采购总监</td><td><button class="btn btn-link">编辑</button></td></tr></tbody></table><button class="btn btn-dashed" style="width:100%;margin-top:16px">+ 添加联系人</button>`, showFooter: false }); }
 };
 
@@ -334,7 +422,19 @@ Pages['order-type'] = {
         });
     },
     add() { Modal.create({ title: '新增订单类型', content: '<p>类型表单...</p>', onOk: () => Message.success('类型创建成功') }); },
-    edit(id) { Modal.create({ title: '编辑订单类型', content: '<p>编辑...</p>', onOk: () => Message.success('保存成功') }); }
+    edit(id) {
+        const orderType = DataService.getOrderTypes().find(t => t.id === id);
+        if (!orderType) return;
+        Modal.create({
+            title: '编辑订单类型', content: `<form class="modal-form">
+    <div class="form-row"><label class="form-label required">类型编码</label><div class="form-content"><input type="text" class="form-control" id="edit-code" value="${orderType.code}" required readonly style="background:#f5f5f5"></div></div>
+    <div class="form-row"><label class="form-label required">类型名称</label><div class="form-content"><input type="text" class="form-control" id="edit-name" value="${orderType.name}" required></div></div>
+    <div class="form-row"><label class="form-label">描述</label><div class="form-content"><textarea class="form-control" id="edit-description" rows="2">${orderType.description || ''}</textarea></div></div>
+    <div class="form-row"><label class="form-label">审核规则</label><div class="form-content"><input type="text" class="form-control" id="edit-auditRule" value="${orderType.auditRule}"></div></div>
+    <div class="form-row"><label class="form-label">拆分规则</label><div class="form-content"><input type="text" class="form-control" id="edit-splitRule" value="${orderType.splitRule}"></div></div>
+  </form>`, onOk: () => Message.success('订单类型已更新')
+        });
+    }
 };
 
 // 收货人管理
@@ -371,5 +471,17 @@ Pages['consignee'] = {
   </form>`, onOk: () => Message.success('收货人创建成功')
         });
     },
-    edit(id) { Modal.create({ title: '编辑收货人', content: '<p>编辑...</p>', onOk: () => Message.success('保存成功') }); }
+    edit(id) {
+        const consignee = DataService.getConsignees().find(c => c.id === id);
+        if (!consignee) return;
+        Modal.create({
+            title: '编辑收货人', content: `<form class="modal-form">
+    <div class="form-row"><label class="form-label required">所属客户</label><div class="form-content"><select class="form-control form-select" id="edit-customer">${DataService.getCustomers().map(c => `<option ${c.name === consignee.customer ? 'selected' : ''}>${c.name}</option>`).join('')}</select></div></div>
+    <div class="form-row"><label class="form-label required">收货人姓名</label><div class="form-content"><input type="text" class="form-control" id="edit-name" value="${consignee.name}" required></div></div>
+    <div class="form-row"><label class="form-label required">联系电话</label><div class="form-content"><input type="text" class="form-control" id="edit-phone" value="${consignee.phone}" required></div></div>
+    <div class="form-row"><label class="form-label required">收货地址</label><div class="form-content"><textarea class="form-control" id="edit-address" rows="2" required>${consignee.address}</textarea></div></div>
+    <div class="form-row"><label class="form-label">设为默认</label><div class="form-content"><label class="checkbox-item"><input type="checkbox" id="edit-isDefault" ${consignee.isDefault ? 'checked' : ''}><span class="checkbox-box"></span>默认收货人</label></div></div>
+  </form>`, onOk: () => Message.success('收货人信息已更新')
+        });
+    }
 };

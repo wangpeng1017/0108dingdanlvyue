@@ -177,7 +177,7 @@ Pages['order-list'] = {
       <div class="search-item"><label>订单编号</label><input type="text" class="form-control" id="search-oid" placeholder="请输入订单号"></div>
       <div class="search-item"><label>客户</label><select class="form-control form-select" id="search-customer"><option value="">全部</option>${DataService.getCustomers().map(c => `<option>${c.name}</option>`).join('')}</select></div>
       <div class="search-item"><label>状态</label><select class="form-control form-select" id="search-status"><option value="">全部</option><option>待审核</option><option>已审核</option><option>已拆分</option><option>已发货</option><option>已完成</option><option>已取消</option></select></div>
-      <div class="search-item"><label>订单日期</label><input type="date" class="form-control" id="search-date-start" style="width:130px"> - <input type="date" class="form-control" id="search-date-end" style="width:130px"></div>
+      <div class="search-item"><label>订单日期</label><div style="display:flex;align-items:center;gap:8px"><input type="date" class="form-control" id="search-date-start" style="width:130px"><span style="color:var(--text-secondary)">-</span><input type="date" class="form-control" id="search-date-end" style="width:130px"></div></div>
       <div class="search-actions"><button class="btn btn-primary" onclick="Pages['order-list'].search()">🔍 搜索</button><button class="btn btn-default" onclick="Pages['order-list'].reset()">↻ 重置</button></div>
     </div>
     <div class="content-card">
