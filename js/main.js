@@ -4,6 +4,7 @@ window.Pages = window.Pages || {};
 // 主应用逻辑
 const App = {
     currentPage: 'dashboard',
+    tabHistory: {}, // 存储每个一级菜单的标签历史
 
     init() {
         this.bindNavigation();
@@ -108,6 +109,20 @@ const App = {
             return;
         }
 
+        // 获取当前一级菜单的标识
+        const parentNav = submenu.previousElementSibling;
+        const parentKey = parentNav?.dataset?.submenu || 'default';
+
+        // 初始化该一级菜单的历史记录
+        if (!this.tabHistory[parentKey]) {
+            this.tabHistory[parentKey] = [];
+        }
+
+        // 添加当前页面到历史记录(如果不存在)
+        if (!this.tabHistory[parentKey].includes(activePage)) {
+            this.tabHistory[parentKey].push(activePage);
+        }
+
         // 页面图标映射
         const pageIcons = {
             // 主数据管理
@@ -140,18 +155,19 @@ const App = {
             'report-query': '🔍'
         };
 
-        // 只显示当前激活的标签
-        const activeLink = Array.from(subLinks).find(link => link.dataset.page === activePage);
-        if (!activeLink) {
-            headerTabs.style.display = 'none';
-            return;
-        }
+        // 生成历史标签页
+        const tabs = this.tabHistory[parentKey].map(page => {
+            const link = Array.from(subLinks).find(l => l.dataset.page === page);
+            if (!link) return '';
 
-        const page = activeLink.dataset.page;
-        const text = activeLink.textContent.trim();
-        const icon = pageIcons[page] || '📄';
+            const text = link.textContent.trim();
+            const icon = pageIcons[page] || '📄';
+            const isActive = page === activePage ? 'active' : '';
 
-        headerTabs.innerHTML = `<div class="tab-item active" data-page="${page}">${icon && `<span class="tab-icon">${icon}</span>`}${text}</div>`;
+            return `<div class="tab-item ${isActive}" data-page="${page}" onclick="App.loadPage('${page}')">${icon && `<span class="tab-icon">${icon}</span>`}${text}</div>`;
+        }).filter(t => t).join('');
+
+        headerTabs.innerHTML = tabs;
         headerTabs.style.display = 'flex';
     },
 
