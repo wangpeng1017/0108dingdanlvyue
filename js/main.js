@@ -108,12 +108,45 @@ const App = {
             return;
         }
 
+        // 页面图标映射
+        const pageIcons = {
+            // 主数据管理
+            'user-management': '👤',
+            'role-management': '👥',
+            'rule-management': '📋',
+            'warehouse-master': '🏭',
+            'product-master': '📦',
+            'service-provider': '🚚',
+            'customer-master': '🏢',
+            'contract-management': '📄',
+            'order-type': '📑',
+            'consignee': '📍',
+            // 销售管理
+            'order-create': '➕',
+            'order-list': '📊',
+            'order-split': '✂️',
+            'order-status': '📈',
+            // 交货单管理
+            'delivery-create': '🆕',
+            'delivery-list': '📋',
+            'delivery-trace': '🔍',
+            // S&OP计划
+            'sop-data': '📊',
+            'sop-demand': '📈',
+            'sop-coordinate': '🤝',
+            'sop-tracking': '👁️',
+            // 报表分析
+            'report-template': '📝',
+            'report-query': '🔍'
+        };
+
         // 生成标签页
         const tabs = Array.from(subLinks).map(link => {
             const page = link.dataset.page;
             const text = link.textContent.trim();
+            const icon = pageIcons[page] || '📄';
             const isActive = page === activePage ? 'active' : '';
-            return `<div class="tab-item ${isActive}" data-page="${page}" onclick="App.loadPage('${page}')">${text}</div>`;
+            return `<div class="tab-item ${isActive}" data-page="${page}" onclick="App.loadPage('${page}')"><span class="tab-icon">${icon}</span>${text}</div>`;
         }).join('');
 
         headerTabs.innerHTML = tabs;
