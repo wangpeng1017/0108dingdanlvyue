@@ -185,15 +185,6 @@ Pages['order-create'] = {
     row.querySelector('.planning-strategy').textContent = opt.dataset.strategy || '-';
     row.querySelector('.bin-code').textContent = opt.dataset.bin || '-';
     row.querySelector('.unit').textContent = opt.dataset.unit || '-';
-    row.dataset.materialCode = opt.dataset.code;
-    row.dataset.materialName = opt.dataset.name;
-    row.dataset.specification = opt.dataset.spec;
-    row.dataset.productLargeText = opt.dataset.large;
-    row.dataset.productMediumText = opt.dataset.medium;
-    row.dataset.productSmallText = opt.dataset.small;
-    row.dataset.planningStrategy = opt.dataset.strategy;
-    row.dataset.binCode = opt.dataset.bin;
-    row.dataset.unitName = opt.dataset.unit;
   },
 
   submit() {
@@ -213,26 +204,28 @@ Pages['order-create'] = {
 
     const products = [];
     document.querySelectorAll('#order-lines tbody tr').forEach(row => {
+      const select = row.querySelector('select');
+      const opt = select.options[select.selectedIndex];
       const qty = parseInt(row.querySelector('.qty-input').value) || 0;
       if (qty > 0) {
         products.push({
           forecastVersion: forecastVersion,
           customerCode: customerCode,
           customerName: customerName,
-          materialCode: row.dataset.materialCode,
-          materialName: row.dataset.materialName,
-          specification: row.dataset.specification,
+          materialCode: opt.dataset.code || opt.value,
+          materialName: opt.dataset.name || '',
+          specification: opt.dataset.spec || '',
           productLarge: 'CPDL_001',
-          productLargeText: row.dataset.productLargeText,
+          productLargeText: opt.dataset.large || '',
           productMedium: 'CPZL_1212',
-          productMediumText: row.dataset.productMediumText,
+          productMediumText: opt.dataset.medium || '',
           productSmall: 'CPXL_001',
-          productSmallText: row.dataset.productSmallText,
-          planningStrategy: row.dataset.planningStrategy,
-          binCode: row.dataset.binCode,
+          productSmallText: opt.dataset.small || '',
+          planningStrategy: opt.dataset.strategy || '',
+          binCode: opt.dataset.bin || '',
           qty: qty,
           unit: 'Pcs',
-          unitName: row.dataset.unitName,
+          unitName: opt.dataset.unit || '',
           month: month,
           day: day,
           probability: probability,
