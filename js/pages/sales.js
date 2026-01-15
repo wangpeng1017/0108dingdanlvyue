@@ -4,16 +4,18 @@
 const PPS_API = {
   // 代理服务器地址（阿里云，支持HTTPS）
   proxyHost: '8.130.182.148',
-  proxyPort: '3003',
+  httpPort: '3003',   // HTTP 端口
+  httpsPort: '3443',  // HTTPS 端口
   // API 路径
   path: '/api/pps/forecast/ppsBaseIncrementalForecast/otherAdd',
 
   // 获取完整的 API URL（自动选择协议）
   get url() {
-    // 如果页面是HTTPS，使用代理服务器的HTTPS
-    // 如果页面是HTTP，使用代理服务器的HTTP
+    // 如果页面是HTTPS，使用代理服务器的HTTPS端口
+    // 如果页面是HTTP，使用代理服务器的HTTP端口
     const protocol = window.location.protocol; // 保持与页面协议一致
-    return protocol + '//' + this.proxyHost + ':' + this.proxyPort + this.path;
+    const port = protocol === 'https:' ? this.httpsPort : this.httpPort;
+    return protocol + '//' + this.proxyHost + ':' + port + this.path;
   },
 
   // Token
@@ -328,14 +330,16 @@ Pages['order-create'] = {
   },
 
   api() {
+    const currentUrl = PPS_API.url;
+    const status = '<span class="status-tag success">运行中</span>';
     Modal.create({
       title: 'API对接配置',
       showFooter: false,
       content: `
         <div class="modal-form">
-          <div class="form-row"><label class="form-label">代理服务</label><div class="form-content"><span class="status-tag success">运行中</span></div></div>
-          <div class="form-row"><label class="form-label">接口地址</label><div class="form-content"><input type="text" class="form-control" value="${PPS_API.url}" readonly></div></div>
-          <div class="form-row"><label class="form-label">说明</label><div class="form-content" style="font-size:13px;color:var(--text-secondary)">通过阿里云代理服务器转发请求到PPS API</div></div>
+          <div class="form-row"><label class="form-label">代理服务</label><div class="form-content">${status}</div></div>
+          <div class="form-row"><label class="form-label">接口地址</label><div class="form-content"><input type="text" class="form-control" value="${currentUrl}" readonly></div></div>
+          <div class="form-row"><label class="form-label">说明</label><div class="form-content" style="font-size:13px;color:var(--text-secondary)">通过阿里云代理服务器转发请求到PPS API<br>HTTP: 端口3003 | HTTPS: 端口3443</div></div>
         </div>
       `
     });
