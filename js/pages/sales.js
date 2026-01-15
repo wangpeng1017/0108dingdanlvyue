@@ -1,17 +1,21 @@
 // 二、销售管理页面模块 - PPS预测提报版
 
-// PPS API 配置 - 自动根据页面协议选择 HTTP/HTTPS
+// PPS API 配置
 const PPS_API = {
-  // 根据当前页面协议自动选择 API 地址
-  getBaseUrl() {
-    const isHttps = window.location.protocol === 'https:';
-    const apiHost = '47.92.163.169';
-    return isHttps ? 'https://' + apiHost : 'http://' + apiHost;
-  },
+  // API 主机地址
+  host: '47.92.163.169',
+  // API 路径
+  path: '/mes-api/pps-api/forecast/ppsBaseIncrementalForecast/otherAdd',
+  // 是否强制使用 HTTP（解决 SSL 证书问题）
+  forceHttp: true,
+
+  // 获取完整的 API URL
   get url() {
-    return this.getBaseUrl() + '/mes-api/pps-api/forecast/ppsBaseIncrementalForecast/otherAdd';
+    const protocol = this.forceHttp ? 'http' : (window.location.protocol === 'https:' ? 'https' : 'http');
+    return protocol + '://' + this.host + this.path;
   },
-  // 兼容旧代码的 getter
+
+  // Token
   token: ''
 };
 
@@ -323,10 +327,20 @@ Pages['order-create'] = {
   },
 
   api() {
+    const currentMode = PPS_API.forceHttp ? 'HTTP (强制)' : '自动检测';
     Modal.create({
       title: 'API对接配置',
       showFooter: false,
-      content: '<div class="modal-form"><div class="form-row"><label class="form-label">接口地址</label><div class="form-content"><input type="text" class="form-control" value="' + PPS_API.url + '" readonly></div></div></div><div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-primary" onclick="Message.success(\'配置已保存\')">保存配置</button><button class="btn btn-default" onclick="Message.success(\'连接测试成功\')">测试连接</button></div>'
+      content: `
+        <div class="modal-form">
+          <div class="form-row"><label class="form-label">当前模式</label><div class="form-content"><span class="status-tag ${PPS_API.forceHttp ? 'warning' : 'success'}">${currentMode}</span></div></div>
+          <div class="form-row"><label class="form-label">接口地址</label><div class="form-content"><input type="text" class="form-control" value="${PPS_API.url}" readonly></div></div>
+          <div class="form-row"><label class="form-label">说明</label><div class="form-content" style="font-size:13px;color:var(--text-secondary)">由于API服务器SSL证书问题，当前强制使用HTTP。如需HTTPS，请为API服务器配置有效证书。</div></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:16px">
+          <button class="btn btn-default" onclick="Message.info(\'请联系API提供商配置HTTPS证书\')">配置说明</button>
+        </div>
+      `
     });
   }
 };
