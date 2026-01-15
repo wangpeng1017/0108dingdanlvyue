@@ -1,4 +1,5 @@
-// 二、销售管理页面模块 - PPS预测提报版
+# -*- coding: utf-8 -*-
+content = """// 二、销售管理页面模块 - PPS预测提报版
 
 // PPS API 配置 - 使用阿里云代理服务
 const PPS_API = {
@@ -364,3 +365,9 @@ Pages['order-status'] = {
   template: '<div class="page-header"><h1 class="page-title">订单状态跟踪</h1></div>',
   init() {}
 };
+"""
+
+with open('E:/trae/0108zhengtai/chint-demo/js/pages/sales.js', 'w', encoding='utf-8') as f:
+    f.write(content)
+
+print('OK - Updated to use proxy server')
