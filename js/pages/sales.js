@@ -31,7 +31,7 @@ Pages['order-create'] = {
           <div class="form-row">
             <label class="form-label required">预测版本号</label>
             <div class="form-content">
-              <input type="text" class="form-control" name="forecastVersion" id="forecastVersion" value="FC202602_V1.0" placeholder="如: FC202602_V1.0">
+              <input type="text" class="form-control" name="forecastVersion" id="forecastVersion" value="FC202601_V2.0" placeholder="如: FC202601_V2.0">
             </div>
           </div>
           <div class="form-row">
@@ -146,7 +146,7 @@ Pages['order-create'] = {
     const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
     const monthStr = nextMonth.toISOString().slice(0, 7);
     document.getElementById('month').value = monthStr;
-    const version = 'FC' + monthStr.replace('-', '') + '_V1.0';
+    const version = 'FC202601_V2.0';
     document.getElementById('forecastVersion').value = version;
     this.addLine();
   },
@@ -298,7 +298,7 @@ Pages['order-create'] = {
   },
 
   reset() {
-    document.getElementById('forecastVersion').value = 'FC' + new Date().toISOString().slice(0, 7).replace('-', '') + '_V1.0';
+    document.getElementById('forecastVersion').value = 'FC202601_V2.0';
     document.getElementById('customerCode').value = 'CS03';
     document.getElementById('customerName').value = '客户01';
     document.getElementById('month').value = new Date().toISOString().slice(0, 7);
