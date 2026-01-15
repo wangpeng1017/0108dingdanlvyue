@@ -1,8 +1,17 @@
 // 二、销售管理页面模块 - PPS预测提报版
 
-// PPS API 配置
+// PPS API 配置 - 自动根据页面协议选择 HTTP/HTTPS
 const PPS_API = {
-  url: 'http://47.92.163.169/mes-api/pps-api/forecast/ppsBaseIncrementalForecast/otherAdd',
+  // 根据当前页面协议自动选择 API 地址
+  getBaseUrl() {
+    const isHttps = window.location.protocol === 'https:';
+    const apiHost = '47.92.163.169';
+    return isHttps ? 'https://' + apiHost : 'http://' + apiHost;
+  },
+  get url() {
+    return this.getBaseUrl() + '/mes-api/pps-api/forecast/ppsBaseIncrementalForecast/otherAdd';
+  },
+  // 兼容旧代码的 getter
   token: ''
 };
 
