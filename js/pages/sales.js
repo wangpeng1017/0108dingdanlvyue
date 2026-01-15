@@ -162,25 +162,25 @@ Pages['order-create'] = {
   addLine() {
     const tbody = document.querySelector('#order-lines tbody');
     const p = this.productData[0];
-    tbody.insertAdjacentHTML('beforeend', \`
-      <tr data-index="\${tbody.children.length}">
+    tbody.insertAdjacentHTML('beforeend', `
+      <tr data-index="${tbody.children.length}">
         <td>
           <select class="form-control form-select" style="width:130px" onchange="Pages['order-create'].selectProduct(this)">
-            \${this.productData.map(pr => '<option value="' + pr.materialCode + '" data-code="' + pr.materialCode + '" data-name="' + pr.materialName + '" data-spec="' + pr.specification + '" data-large="' + pr.productLargeText + '" data-medium="' + pr.productMediumText + '" data-small="' + pr.productSmallText + '" data-strategy="' + pr.planningStrategy + '" data-bin="' + pr.binCode + '" data-unit="' + pr.unitName + '">' + pr.materialCode + '</option>').join('')}
+            ${this.productData.map(pr => '<option value="' + pr.materialCode + '" data-code="' + pr.materialCode + '" data-name="' + pr.materialName + '" data-spec="' + pr.specification + '" data-large="' + pr.productLargeText + '" data-medium="' + pr.productMediumText + '" data-small="' + pr.productSmallText + '" data-strategy="' + pr.planningStrategy + '" data-bin="' + pr.binCode + '" data-unit="' + pr.unitName + '">' + pr.materialCode + '</option>').join('')}
           </select>
         </td>
-        <td class="material-name">\${p?.materialName || '-'}</td>
-        <td class="specification">\${p?.specification || '-'}</td>
-        <td class="product-large">\${p?.productLargeText || '-'}</td>
-        <td class="product-medium">\${p?.productMediumText || '-'}</td>
-        <td class="product-small">\${p?.productSmallText || '-'}</td>
-        <td class="planning-strategy">\${p?.planningStrategy || '-'}</td>
-        <td class="bin-code">\${p?.binCode || '-'}</td>
+        <td class="material-name">${p?.materialName || '-'}</td>
+        <td class="specification">${p?.specification || '-'}</td>
+        <td class="product-large">${p?.productLargeText || '-'}</td>
+        <td class="product-medium">${p?.productMediumText || '-'}</td>
+        <td class="product-small">${p?.productSmallText || '-'}</td>
+        <td class="planning-strategy">${p?.planningStrategy || '-'}</td>
+        <td class="bin-code">${p?.binCode || '-'}</td>
         <td><input type="number" class="form-control qty-input" style="width:100px" value="20000000" min="1" step="1000"></td>
-        <td class="unit">\${p?.unitName || '-'}</td>
+        <td class="unit">${p?.unitName || '-'}</td>
         <td><button type="button" class="btn btn-link" style="color:var(--error-color)" onclick="this.closest('tr').remove()">删除</button></td>
       </tr>
-    \`);
+    `);
   },
 
   selectProduct(el) {
@@ -324,28 +324,29 @@ Pages['order-create'] = {
 
   api() {
     const currentUrl = PPS_API.url;
+    const status = '<span class="status-tag success">运行中</span>';
     Modal.create({
       title: 'API对接配置',
       showFooter: false,
-      content: \`
+      content: `
         <div class="modal-form">
-          <div class="form-row"><label class="form-label">API 状态</label><div class="form-content"><span class="status-tag success">运行中</span></div></div>
-          <div class="form-row"><label class="form-label">接口地址</label><div class="form-content"><input type="text" class="form-control" value="\${currentUrl}" readonly></div></div>
-          <div class="form-row"><label class="form-label">说明</label><div class="form-content" style="font-size:13px;color:var(--text-secondary)">通过服务器端 nginx 代理转发到 PPS API</div></div>
+          <div class="form-row"><label class="form-label">代理服务</label><div class="form-content">${status}</div></div>
+          <div class="form-row"><label class="form-label">接口地址</label><div class="form-content"><input type="text" class="form-control" value="${currentUrl}" readonly></div></div>
+          <div class="form-row"><label class="form-label">说明</label><div class="form-content" style="font-size:13px;color:var(--text-secondary)">通过阿里云代理服务器转发请求到PPS API<br>HTTP: 端口3003 | HTTPS: 端口3443</div></div>
         </div>
-      \`
+      `
     });
   }
 };
 
 // 订单列表 - PPS预测记录
 Pages['order-list'] = {
-  template: \`
+  template: `
     <div class="page-header"><h1 class="page-title">预测提报记录</h1><p class="page-desc">管理所有PPS预测提报记录</p></div>
     <div class="content-card">
       <div class="card-header"><h3 class="card-title">记录列表</h3></div>
       <div id="order-table"><div class="table-empty">暂无数据</div></div>
-    </div>\`,
+    </div>`,
   init() {
     document.getElementById('order-table').innerHTML = '<div class="table-empty">暂无数据</div>';
   }
